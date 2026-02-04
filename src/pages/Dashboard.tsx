@@ -391,7 +391,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
   ];
 
   return (
-    <div className="min-h-full bg-slate-100 -m-4 p-4 lg:-m-6 lg:p-6 pb-24">
+    <div className="min-h-full bg-slate-200 -m-4 p-4 lg:-m-6 lg:p-6 pb-24">
       {/* Server Time Card */}
       <ServerTimeCard />
 
@@ -482,7 +482,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                   dir={language === 'ar' ? 'rtl' : 'ltr'}
                 >
                   {/* LEFT ICON */}
-                  <div className="order-1 shrink-0 opacity-80 group-hover:opacity-100 transition-opacity pt-1">
+                  <div className="order-1 shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
                     <div className={`
                       w-10 h-10
                       rounded-lg
@@ -500,18 +500,18 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                   <div className="order-2 flex-1 pl-4 rtl:pl-0 rtl:pr-4 text-right flex flex-col justify-between h-full">
                     {/* Top: Title */}
                     <div>
-                      <p className="text-sm font-semibold text-slate-600 leading-tight">
+                      <p className="text-sm font-semibold text-slate-600 leading-none mb-1">
                         {card.title}
                       </p>
                       {(card.subtitle && card.subtitle !== "") && (
-                        <p className="text-[10px] text-slate-400 mt-1 truncate font-medium">
+                        <p className="text-[10px] text-slate-400 mt-0.5 truncate font-medium">
                           {card.subtitle}
                         </p>
                       )}
                     </div>
 
-                    {/* Bottom: Number - CLOCK FONT MATCH (ExtraBold) */}
-                    <span className="text-4xl font-extrabold text-slate-900 tabular-nums block tracking-tight leading-none mb-1">
+                    {/* Bottom: Number - CLOCK FONT MATCH (Black/Wide) */}
+                    <span className="text-4xl font-black text-slate-900 tabular-nums block tracking-wide leading-none mb-1">
                       <AnimatedNumber value={card.value} />
                     </span>
                   </div>

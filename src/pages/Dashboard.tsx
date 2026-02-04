@@ -482,7 +482,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                   dir={language === 'ar' ? 'rtl' : 'ltr'}
                 >
                   {/* LEFT ICON */}
-                  <div className="order-1 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity">
+                  <div className="order-1 shrink-0 opacity-50 group-hover:opacity-100 transition-opacity">
                     <div className={`
                       w-9 h-9
                       rounded-lg
@@ -492,24 +492,24 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                       group-hover:scale-105 transition-transform duration-300
                       ${card.iconColor}
                     `}>
-                      <Icon size={18} strokeWidth={2} />
+                      <Icon size={18} strokeWidth={2} className="transform scale-90" />
                     </div>
                   </div>
 
                   {/* CONTENT (RIGHT) - Grouped Tightly */}
                   <div className="order-2 flex-1 pl-3 rtl:pl-0 rtl:pr-3 text-right flex flex-col justify-center h-full">
-                    <div>
-                      <p className="text-xs font-semibold text-slate-700 leading-tight mb-0.5 uppercase tracking-wide opacity-90">
+                    <div className="flex flex-col justify-center">
+                      <p className="text-sm font-semibold text-slate-700 leading-none mb-0.5">
                         {card.title}
                       </p>
 
-                      {/* Number - Balanced & Bold */}
-                      <span className="text-xl font-bold text-slate-800 tabular-nums block tracking-tight leading-none">
+                      {/* Number - Bold & Balanced */}
+                      <span className="text-2xl font-bold text-slate-800 tabular-nums block tracking-tight leading-none">
                         <AnimatedNumber value={card.value} />
                       </span>
 
                       {(card.subtitle && card.subtitle !== "") && (
-                        <p className="text-[10px] text-slate-400 mt-0.5 truncate font-medium opacity-80">
+                        <p className="text-[10px] text-slate-500 mt-0.5 truncate font-medium opacity-60">
                           {card.subtitle}
                         </p>
                       )}

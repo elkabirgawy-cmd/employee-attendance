@@ -466,8 +466,8 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                     group
                     relative
                     flex items-start justify-between
-                    h-[120px]
-                    px-5 py-4
+                    h-[110px]
+                    px-4 py-3.5
                     rounded-xl
                     bg-white
                     shadow-sm hover:shadow-md
@@ -497,10 +497,10 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                   </div>
 
                   {/* CONTENT (RIGHT) - Split Top/Bottom */}
-                  <div className="order-2 flex-1 pl-4 rtl:pl-0 rtl:pr-4 text-right flex flex-col justify-between h-full">
+                  <div className="order-2 flex-1 pl-3 rtl:pl-0 rtl:pr-3 text-right flex flex-col justify-between h-full">
                     {/* Top: Title */}
-                    <div>
-                      <p className="text-sm font-semibold text-slate-600 leading-none mb-1">
+                    <div className="pt-0.5">
+                      <p className="text-sm font-semibold text-slate-700 leading-none mb-1">
                         {card.title}
                       </p>
                       {(card.subtitle && card.subtitle !== "") && (
@@ -510,8 +510,8 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                       )}
                     </div>
 
-                    {/* Bottom: Number - CLOCK FONT MATCH (Black/Wide) */}
-                    <span className="text-4xl font-black text-slate-900 tabular-nums block tracking-wide leading-none mb-1">
+                    {/* Bottom: Number - Balanced Size */}
+                    <span className="text-3xl font-black text-slate-900 tabular-nums block tracking-wide leading-none">
                       <AnimatedNumber value={card.value} />
                     </span>
                   </div>

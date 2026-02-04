@@ -1,0 +1,170 @@
+/* Global Print Styles for Payroll Cards */
+
+/* A4 Page Setup */
+@page {
+  size: A4;
+  margin: 15mm;
+}
+
+/* Print Mode General Settings */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
+  }
+
+  /* Hide non-printable elements */
+  header,
+  nav,
+  aside,
+  footer:not(.print-footer),
+  .no-print,
+  button:not(.print-button),
+  .sidebar,
+  .navbar {
+    display: none !important;
+  }
+
+  /* Ensure print content is visible */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Prevent page breaks inside important elements */
+  .print-card,
+  .print-container,
+  table,
+  .no-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Force background colors and images to print */
+  .print-card,
+  .print-header,
+  .print-footer,
+  .print-earnings-box,
+  .print-deductions-box {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Remove shadows for cleaner print */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Optimize link display */
+  a[href]:after {
+    content: none !important;
+  }
+
+  /* Ensure proper image sizing */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Center content on page */
+  .print-container {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 190mm;
+  }
+
+  /* Typography optimizations for print */
+  body {
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 11pt;
+    line-height: 1.4;
+  }
+
+  h1 { font-size: 18pt; }
+  h2 { font-size: 14pt; }
+  h3 { font-size: 12pt; }
+
+  /* Ensure proper text rendering */
+  p, div, span {
+    widows: 3;
+    orphans: 3;
+  }
+
+  /* Table optimizations */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: right;
+  }
+
+  /* Prevent background images from loading */
+  * {
+    background-image: none !important;
+  }
+
+  /* Allow specific background colors */
+  .print-header,
+  .print-footer,
+  .print-earnings-box,
+  .print-deductions-box,
+  .print-attendance {
+    background-color: inherit !important;
+  }
+}
+
+/* RTL Print Support */
+@media print {
+  [dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+  }
+
+  [dir="rtl"] table th,
+  [dir="rtl"] table td {
+    text-align: right;
+  }
+}
+
+/* Arabic Font Support - System Fonts Fallback */
+@media print {
+  body,
+  .print-container,
+  .print-card {
+    font-family: 'Cairo', 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+  }
+
+  /* Ensure Arabic numerals are displayed correctly */
+  .print-item-value,
+  .print-total-value,
+  .print-footer-amount,
+  .print-attendance-value {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Utility Classes for Print Control */
+.print-only {
+  display: none;
+}
+
+@media print {
+  .print-only {
+    display: block !important;
+  }
+
+  .screen-only {
+    display: none !important;
+  }
+}

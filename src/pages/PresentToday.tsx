@@ -1,0 +1,265 @@
+import { useEffect, useState } from 'react';
+import { Clock, ArrowLeft, Users } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
+
+interface PresentTodayProps {
+  currentPage?: string;
+  onNavigate?: (page: string) => void;
+}
+
+interface EmployeeAttendance {
+  employee_id: string;
+  employee_name: string;
+  employee_number: string;
+  check_in_time: string;
+  status: string;
+  shift_start?: string;
+  shift_end?: string;
+}
+
+export default function PresentToday({ currentPage, onNavigate }: PresentTodayProps) {
+  const { language } = useLanguage();
+  const [employees, setEmployees] = useState<EmployeeAttendance[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (currentPage === 'present-today') {
+      fetchPresentToday();
+    }
+  }, [currentPage]);
+
+  async function fetchPresentToday() {
+    setLoading(true);
+    try {
+      const now = new Date();
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+      const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999).toISOString();
+
+      const { data: attendanceData, error } = await supabase
+        .from('attendance_logs')
+        .select(`
+          employee_id,
+          check_in_time,
+          status,
+          employees!inner(
+            full_name,
+            employee_number,
+            is_active,
+            shift_id
+          ),
+          shifts(
+            start_time,
+            end_time
+          )
+        `)
+        .gte('check_in_time', startOfDay)
+        .lte('check_in_time', endOfDay)
+        .not('check_in_time', 'is', null)
+        .eq('employees.is_active', true)
+        .order('check_in_time', { ascending: false });
+
+      if (error) throw error;
+
+      const employeeMap = new Map<string, EmployeeAttendance>();
+
+      attendanceData?.forEach((log: any) => {
+        if (!employeeMap.has(log.employee_id)) {
+          employeeMap.set(log.employee_id, {
+            employee_id: log.employee_id,
+            employee_name: log.employees.full_name,
+            employee_number: log.employees.employee_number,
+            check_in_time: log.check_in_time,
+            status: log.status || 'on_time',
+            shift_start: log.shifts?.start_time,
+            shift_end: log.shifts?.end_time,
+          });
+        }
+      });
+
+      setEmployees(Array.from(employeeMap.values()));
+    } catch (error) {
+      console.error('Error fetching present today:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleBack() {
+    if (onNavigate) {
+      onNavigate('dashboard');
+    }
+  }
+
+  function getInitials(name: string) {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  }
+
+  function formatTime(timeString: string) {
+    const date = new Date(timeString);
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+
+  function getStatusColor(status: string) {
+    switch (status) {
+      case 'on_time':
+        return 'bg-green-100 text-green-700';
+      case 'late':
+        return 'bg-red-100 text-red-700';
+      case 'early':
+        return 'bg-blue-100 text-blue-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
+    }
+  }
+
+  function getStatusLabel(status: string) {
+    if (language === 'ar') {
+      switch (status) {
+        case 'on_time':
+          return 'في الموعد';
+        case 'late':
+          return 'متأخر';
+        case 'early':
+          return 'مبكر';
+        default:
+          return 'غير محدد';
+      }
+    } else {
+      switch (status) {
+        case 'on_time':
+          return 'On Time';
+        case 'late':
+          return 'Late';
+        case 'early':
+          return 'Early';
+        default:
+          return 'Unknown';
+      }
+    }
+  }
+
+  if (currentPage !== 'present-today') return null;
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm sticky top-0 z-10">
+        <div className="px-4 py-4">
+          <div className="flex items-center gap-3" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+            <button
+              onClick={handleBack}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <ArrowLeft size={24} className={language === 'ar' ? 'rotate-180' : ''} />
+            </button>
+            <div className="flex-1">
+              <h1 className="text-2xl font-bold text-gray-900">
+                {language === 'ar' ? 'الحاضرون اليوم' : 'Present Today'}
+              </h1>
+              <p className="text-sm text-gray-500">
+                {language === 'ar'
+                  ? `${employees.length} موظف سجلوا حضور اليوم`
+                  : `${employees.length} employees checked in today`}
+              </p>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+              <Clock className="text-green-600" size={24} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4">
+        {loading ? (
+          <div className="space-y-3">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="bg-white rounded-2xl p-4 animate-pulse">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gray-200 rounded-full" />
+                  <div className="flex-1">
+                    <div className="h-4 bg-gray-200 rounded w-32 mb-2" />
+                    <div className="h-3 bg-gray-200 rounded w-24" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : employees.length === 0 ? (
+          <div className="bg-white rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Users className="text-gray-400" size={32} />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              {language === 'ar' ? 'لا يوجد حضور اليوم' : 'No Attendance Today'}
+            </h3>
+            <p className="text-gray-500">
+              {language === 'ar'
+                ? 'لم يسجل أي موظف حضوره اليوم'
+                : 'No employees have checked in today'}
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {employees.map((emp) => (
+              <div
+                key={emp.employee_id}
+                className="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div
+                  className="flex items-center gap-3"
+                  dir={language === 'ar' ? 'rtl' : 'ltr'}
+                >
+                  {/* Avatar */}
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold flex-shrink-0">
+                    {getInitials(emp.employee_name)}
+                  </div>
+
+                  {/* Employee Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-semibold text-gray-900 truncate">
+                        {emp.employee_name}
+                      </h3>
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getStatusColor(emp.status)}`}>
+                        {getStatusLabel(emp.status)}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-gray-500">
+                      <span className="flex items-center gap-1">
+                        <Clock size={14} />
+                        {formatTime(emp.check_in_time)}
+                      </span>
+                      {emp.shift_start && (
+                        <span className="text-xs">
+                          {language === 'ar' ? 'وردية:' : 'Shift:'} {emp.shift_start} - {emp.shift_end}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Status Indicator */}
+                  <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                    emp.status === 'on_time' ? 'bg-green-500' :
+                    emp.status === 'late' ? 'bg-red-500' :
+                    'bg-blue-500'
+                  }`} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

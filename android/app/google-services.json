@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "125391359194",
+    "project_id": "employeeattendance-bd204",
+    "storage_bucket": "employeeattendance-bd204.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:125391359194:android:6f914cfc1b238d411da9e3",
+        "android_client_info": {
+          "package_name": "com.geoshift.attendance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRDXz4rqEqrfy5VvdPoYhKlUANWuRZ15g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

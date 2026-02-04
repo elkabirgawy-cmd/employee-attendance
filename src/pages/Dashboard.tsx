@@ -465,14 +465,13 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                   className={`
                     group
                     relative
-                    flex items-center justify-between
-                    h-[108px]
-                    px-4
+                    flex items-start justify-between
+                    h-[120px]
+                    px-5 py-4
                     rounded-xl
                     bg-white
-                    shadow-[0_2px_8px_rgba(0,0,0,0.04)]
-                    hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]
-                    border border-slate-100
+                    shadow-sm hover:shadow-md
+                    border border-slate-200
                     transition-all duration-200 ease-out
                     active:scale-[0.99]
                     w-full
@@ -482,8 +481,8 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                   `}
                   dir={language === 'ar' ? 'rtl' : 'ltr'}
                 >
-                  {/* LEFT ICON (Secondary) */}
-                  <div className="order-1 shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
+                  {/* LEFT ICON */}
+                  <div className="order-1 shrink-0 opacity-80 group-hover:opacity-100 transition-opacity pt-1">
                     <div className={`
                       w-10 h-10
                       rounded-lg
@@ -497,22 +496,24 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                     </div>
                   </div>
 
-                  {/* CONTENT (RIGHT - Dominant) */}
-                  <div className="order-2 flex-1 pl-4 rtl:pl-0 rtl:pr-4 text-right flex flex-col justify-center h-full">
-                    {/* Animated Number - HEROIC SIZE */}
-                    <span className="text-[2.5rem] leading-[1] font-black text-slate-900 tabular-nums block tracking-tighter mb-0.5">
+                  {/* CONTENT (RIGHT) - Split Top/Bottom */}
+                  <div className="order-2 flex-1 pl-4 rtl:pl-0 rtl:pr-4 text-right flex flex-col justify-between h-full">
+                    {/* Top: Title */}
+                    <div>
+                      <p className="text-base font-semibold text-slate-700 leading-tight">
+                        {card.title}
+                      </p>
+                      {(card.subtitle && card.subtitle !== "") && (
+                        <p className="text-xs text-slate-400 mt-1 truncate font-medium">
+                          {card.subtitle}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Bottom: Number - CLOCK FONT MATCH */}
+                    <span className="text-4xl font-black text-slate-900 tabular-nums block tracking-tight leading-none mb-1">
                       <AnimatedNumber value={card.value} />
                     </span>
-
-                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
-                      {card.title}
-                    </p>
-
-                    {(card.subtitle && card.subtitle !== "") && (
-                      <p className="text-[10px] text-slate-400 mt-0.5 truncate font-medium opacity-70">
-                        {card.subtitle}
-                      </p>
-                    )}
                   </div>
                 </button>
               );

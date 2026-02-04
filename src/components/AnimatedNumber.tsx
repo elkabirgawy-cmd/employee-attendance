@@ -20,7 +20,7 @@ export default function AnimatedNumber({
     const rafRef = useRef<number | null>(null);
 
     const fmt = useMemo(() => {
-        return new Intl.NumberFormat("ar-EG", {
+        return new Intl.NumberFormat("en-US", {
             minimumFractionDigits: decimals,
             maximumFractionDigits: decimals,
         });

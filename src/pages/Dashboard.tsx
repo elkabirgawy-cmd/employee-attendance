@@ -453,7 +453,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3">
             {summaryCards.map((card) => {
               const Icon = card.icon;
               const isSelected = selectedCardId === card.id;
@@ -500,18 +500,18 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                   <div className="order-2 flex-1 pl-4 rtl:pl-0 rtl:pr-4 text-right flex flex-col justify-between h-full">
                     {/* Top: Title */}
                     <div>
-                      <p className="text-base font-semibold text-slate-700 leading-tight">
+                      <p className="text-sm font-semibold text-slate-600 leading-tight">
                         {card.title}
                       </p>
                       {(card.subtitle && card.subtitle !== "") && (
-                        <p className="text-xs text-slate-400 mt-1 truncate font-medium">
+                        <p className="text-[10px] text-slate-400 mt-1 truncate font-medium">
                           {card.subtitle}
                         </p>
                       )}
                     </div>
 
-                    {/* Bottom: Number - CLOCK FONT MATCH */}
-                    <span className="text-4xl font-black text-slate-900 tabular-nums block tracking-tight leading-none mb-1">
+                    {/* Bottom: Number - CLOCK FONT MATCH (ExtraBold) */}
+                    <span className="text-4xl font-extrabold text-slate-900 tabular-nums block tracking-tight leading-none mb-1">
                       <AnimatedNumber value={card.value} />
                     </span>
                   </div>

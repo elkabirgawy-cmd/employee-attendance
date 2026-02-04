@@ -172,7 +172,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-slate-50" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       {/* Top Header */}
-      <div className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-50">
+      <div className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-100 z-50">
         <div className="flex items-center justify-between h-full px-4">
           <div className="flex items-center gap-3">
             <button
@@ -235,11 +235,11 @@ export default function Layout({ children }: LayoutProps) {
       <div className="flex pt-16">
         {/* Sidebar */}
         <aside
-          className={`fixed lg:static inset-y-0 left-0 bg-white border-r border-slate-200 transform transition-all duration-300 ease-in-out z-40 pt-16 lg:pt-0 overflow-hidden flex flex-col ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          className={`fixed lg:static inset-y-0 left-0 bg-white border-r border-slate-100 transform transition-all duration-300 ease-in-out z-40 pt-16 lg:pt-0 overflow-hidden flex flex-col ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
             } ${sidebarCollapsed ? 'lg:w-20' : 'lg:w-72'} w-72`}
         >
           {/* Sidebar Header */}
-          <div className={`p-4 border-b border-slate-200 bg-gradient-to-br from-slate-50 to-white ${sidebarCollapsed ? 'lg:px-2' : ''}`}>
+          <div className={`p-4 border-b border-slate-100 bg-white ${sidebarCollapsed ? 'lg:px-2' : ''}`}>
             {!sidebarCollapsed && (
               <div className="mb-3">
                 <div className="flex items-center gap-2 mb-1">

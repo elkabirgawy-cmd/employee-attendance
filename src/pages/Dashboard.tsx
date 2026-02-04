@@ -391,7 +391,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
   ];
 
   return (
-    <div className="min-h-full bg-slate-200 -m-4 p-4 lg:-m-6 lg:p-6 pb-24">
+    <div className="min-h-full bg-slate-50 -m-4 p-4 lg:-m-6 lg:p-6 pb-24">
       {/* Server Time Card */}
       <ServerTimeCard />
 
@@ -400,7 +400,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-4xl font-bold text-slate-900 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 drop-shadow-sm">
+              <h1 className="text-3xl font-bold text-slate-800 tracking-tight">
                 {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
               </h1>
               {dayStatus && (
@@ -467,53 +467,51 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                     relative
                     flex items-center justify-between
                     h-[96px]
-                    px-4
-                    rounded-xl
-                    bg-white/70
-                    backdrop-blur-lg
-                    shadow-[0_4px_20px_rgba(0,0,0,0.03)]
-                    border border-white/30
-                    transition-all duration-150 ease-out
-                    active:scale-[0.98]
+                    px-5
+                    rounded-2xl
+                    bg-white
+                    shadow-[0_8px_24px_rgba(0,0,0,0.06)]
+                    border border-slate-100
+                    transition-all duration-200 ease-out
+                    active:scale-[0.99]
                     w-full
                     rtl:flex-row-reverse
                     overflow-hidden
-                    ${isSelected ? 'ring-2 ring-slate-200 border-slate-300 bg-white/80' : 'hover:bg-white/75'}
+                    ${isSelected ? 'ring-2 ring-indigo-500/10 border-indigo-500/20 bg-indigo-50/10' : 'hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)]'}
                   `}
                   dir={language === 'ar' ? 'rtl' : 'ltr'}
                 >
-                  {/* Subtle Tech Glow (Top) */}
-                  <div className="absolute inset-x-0 top-0 h-[1px] bg-white/40 opacity-70" />
                   {/* LEFT ICON (FORCED VISUAL LEFT via order-1 + rtl:flex-row-reverse) */}
                   <div className="order-1 shrink-0">
                     <div className={`
                       w-12 h-12
-                      rounded-full
-                      bg-white/60
-                      backdrop-blur-md
+                      rounded-xl
+                      bg-slate-50
                       flex items-center justify-center
-                      shadow-[0_0_15px_rgba(255,255,255,0.4)]
-                      border border-white/20
+                      border border-slate-100
+                      group-hover:bg-white group-hover:scale-110 transition-all duration-300
                       ${card.iconColor}
                     `}>
-                      <Icon size={24} strokeWidth={2} />
+                      <Icon size={24} strokeWidth={1.5} />
                     </div>
                   </div>
 
                   {/* CONTENT (RIGHT) */}
                   <div className="order-2 flex-1 px-4 text-right">
-                    <p className="text-sm text-slate-500 font-medium whitespace-nowrap">
+                    <p className="text-sm text-slate-500 font-medium whitespace-nowrap mb-1">
                       {card.title}
                     </p>
 
                     {/* Animated Number */}
-                    <span className="text-3xl font-semibold text-slate-900 tabular-nums block my-0.5">
+                    <span className="text-3xl font-bold text-slate-800 tabular-nums block tracking-tight">
                       <AnimatedNumber value={card.value} />
                     </span>
 
-                    <p className="text-xs text-slate-400 mt-1 truncate">
-                      {card.subtitle}
-                    </p>
+                    {(card.subtitle && card.subtitle !== "") && (
+                      <p className="text-xs text-slate-400 mt-1 truncate">
+                        {card.subtitle}
+                      </p>
+                    )}
                   </div>
                 </button>
               );

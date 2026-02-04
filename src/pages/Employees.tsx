@@ -670,26 +670,26 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
             <div className="hidden md:block bg-white rounded-xl border border-slate-200 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-slate-50 border-b border-slate-200">
+                  <thead className="bg-gray-50/50 border-b border-gray-200 backdrop-blur-sm">
                     <tr>
-                      <th className="text-right py-4 px-6 text-sm font-semibold text-slate-700 w-16">
+                      <th className="text-right py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider w-16">
                       </th>
-                      <th className="text-right py-4 px-6 text-sm font-semibold text-slate-700">
+                      <th className="text-right py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                         {language === 'ar' ? 'الاسم' : 'Name'}
                       </th>
-                      <th className="text-right py-4 px-6 text-sm font-semibold text-slate-700">
+                      <th className="text-right py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                         {language === 'ar' ? 'رقم الموظف' : 'Employee ID'}
                       </th>
-                      <th className="text-right py-4 px-6 text-sm font-semibold text-slate-700">
+                      <th className="text-right py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                         {language === 'ar' ? 'القسم' : 'Department'}
                       </th>
-                      <th className="text-right py-4 px-6 text-sm font-semibold text-slate-700">
+                      <th className="text-right py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                         {language === 'ar' ? 'الفرع' : 'Branch'}
                       </th>
-                      <th className="text-right py-4 px-6 text-sm font-semibold text-slate-700">
+                      <th className="text-right py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                         {language === 'ar' ? 'الحالة' : 'Status'}
                       </th>
-                      <th className="text-right py-4 px-6 text-sm font-semibold text-slate-700">
+                      <th className="text-right py-3 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                         {language === 'ar' ? 'الإجراءات' : 'Actions'}
                       </th>
                     </tr>
@@ -698,8 +698,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
                     {paginatedEmployees.map((employee, index) => (
                       <tr
                         key={employee.id}
-                        className={`border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'
-                          }`}
+                        className="bg-white border-b border-gray-100 hover:bg-gray-50/50 transition-colors cursor-pointer"
                         onClick={() => handleRowClick(employee)}
                       >
                         <td className="py-4 px-6">
@@ -1012,8 +1011,8 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
                 <button
                   onClick={() => toggleEmployeeStatus(selectedEmployee.id, selectedEmployee.is_active)}
                   className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition ${selectedEmployee.is_active
-                      ? 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                      : 'bg-green-100 hover:bg-green-200 text-green-700'
+                    ? 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                    : 'bg-green-100 hover:bg-green-200 text-green-700'
                     }`}
                 >
                   {selectedEmployee.is_active ? (

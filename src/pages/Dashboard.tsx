@@ -391,7 +391,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
   ];
 
   return (
-    <div className="min-h-full bg-slate-50 -m-4 p-4 lg:-m-6 lg:p-6 pb-24">
+    <div className="min-h-full bg-slate-100 -m-4 p-4 lg:-m-6 lg:p-6 pb-24">
       {/* Server Time Card */}
       <ServerTimeCard />
 
@@ -453,7 +453,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {summaryCards.map((card) => {
               const Icon = card.icon;
               const isSelected = selectedCardId === card.id;
@@ -466,49 +466,50 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                     group
                     relative
                     flex items-center justify-between
-                    h-[96px]
-                    px-5
-                    rounded-2xl
+                    h-[108px]
+                    px-4
+                    rounded-xl
                     bg-white
-                    shadow-[0_8px_24px_rgba(0,0,0,0.06)]
+                    shadow-[0_2px_8px_rgba(0,0,0,0.04)]
+                    hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]
                     border border-slate-100
                     transition-all duration-200 ease-out
                     active:scale-[0.99]
                     w-full
                     rtl:flex-row-reverse
                     overflow-hidden
-                    ${isSelected ? 'ring-2 ring-indigo-500/10 border-indigo-500/20 bg-indigo-50/10' : 'hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)]'}
+                    ${isSelected ? 'ring-2 ring-blue-600/10 border-blue-600/30 bg-blue-50/5' : ''}
                   `}
                   dir={language === 'ar' ? 'rtl' : 'ltr'}
                 >
-                  {/* LEFT ICON (FORCED VISUAL LEFT via order-1 + rtl:flex-row-reverse) */}
-                  <div className="order-1 shrink-0">
+                  {/* LEFT ICON (Secondary) */}
+                  <div className="order-1 shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
                     <div className={`
-                      w-12 h-12
-                      rounded-xl
+                      w-10 h-10
+                      rounded-lg
                       bg-slate-50
                       flex items-center justify-center
                       border border-slate-100
-                      group-hover:bg-white group-hover:scale-110 transition-all duration-300
+                      group-hover:scale-105 transition-transform duration-300
                       ${card.iconColor}
                     `}>
-                      <Icon size={24} strokeWidth={1.5} />
+                      <Icon size={20} strokeWidth={2} />
                     </div>
                   </div>
 
-                  {/* CONTENT (RIGHT) */}
-                  <div className="order-2 flex-1 px-4 text-right">
-                    <p className="text-sm text-slate-500 font-medium whitespace-nowrap mb-1">
-                      {card.title}
-                    </p>
-
-                    {/* Animated Number */}
-                    <span className="text-3xl font-bold text-slate-800 tabular-nums block tracking-tight">
+                  {/* CONTENT (RIGHT - Dominant) */}
+                  <div className="order-2 flex-1 pl-4 rtl:pl-0 rtl:pr-4 text-right flex flex-col justify-center h-full">
+                    {/* Animated Number - HEROIC SIZE */}
+                    <span className="text-[2.5rem] leading-[1] font-black text-slate-900 tabular-nums block tracking-tighter mb-0.5">
                       <AnimatedNumber value={card.value} />
                     </span>
 
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                      {card.title}
+                    </p>
+
                     {(card.subtitle && card.subtitle !== "") && (
-                      <p className="text-xs text-slate-400 mt-1 truncate">
+                      <p className="text-[10px] text-slate-400 mt-0.5 truncate font-medium opacity-70">
                         {card.subtitle}
                       </p>
                     )}

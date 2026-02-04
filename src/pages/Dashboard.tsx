@@ -448,25 +448,26 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
       <div className="mb-8">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white/60 rounded-2xl p-5 animate-pulse h-[110px] border border-white/40 shadow-sm" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-            {summaryCards.map((card) => {
-              const Icon = card.icon;
-              const isSelected = selectedCardId === card.id;
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-2">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="bg-white/60 rounded-2xl p-5 animate-pulse h-[110px] border border-white/40 shadow-sm" />
+              ))}
+            </div>
+            ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-2">
+              {summaryCards.map((card) => {
+                const Icon = card.icon;
+                const isSelected = selectedCardId === card.id;
 
-              return (
-                <button
-                  key={card.id}
-                  onClick={() => handleCardClick(card.page, card.title, card.id)}
-                  className={`
+                return (
+                  <button
+                    key={card.id}
+                    onClick={() => handleCardClick(card.page, card.title, card.id)}
+                    className={`
                     group
                     relative
                     flex items-center justify-between
-                    h-[100px]
+                    h-[96px]
                     px-4 py-3
                     rounded-xl
                     bg-white
@@ -479,12 +480,12 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                     overflow-hidden
                     ${isSelected ? 'ring-2 ring-blue-600/10 border-blue-600/30 bg-blue-50/5' : ''}
                   `}
-                  dir={language === 'ar' ? 'rtl' : 'ltr'}
-                >
-                  {/* LEFT ICON */}
-                  <div className="order-1 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity">
-                    <div className={`
-                      w-10 h-10
+                    dir={language === 'ar' ? 'rtl' : 'ltr'}
+                  >
+                    {/* LEFT ICON */}
+                    <div className="order-1 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <div className={`
+                      w-9 h-9
                       rounded-lg
                       bg-slate-50
                       flex items-center justify-center
@@ -492,64 +493,64 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                       group-hover:scale-105 transition-transform duration-300
                       ${card.iconColor}
                     `}>
-                      <Icon size={20} strokeWidth={2} />
+                        <Icon size={18} strokeWidth={2} />
+                      </div>
                     </div>
-                  </div>
 
-                  {/* CONTENT (RIGHT) - Grouped Tightly */}
-                  <div className="order-2 flex-1 pl-3 rtl:pl-0 rtl:pr-3 text-right flex flex-col justify-center h-full">
-                    <div>
-                      <p className="text-sm font-bold text-slate-800 leading-tight mb-0.5">
-                        {card.title}
-                      </p>
-
-                      {/* Number - Secondary but Clear */}
-                      <span className="text-2xl font-extrabold text-slate-900 tabular-nums block tracking-wide leading-none">
-                        <AnimatedNumber value={card.value} />
-                      </span>
-
-                      {(card.subtitle && card.subtitle !== "") && (
-                        <p className="text-[10px] text-slate-500 mt-1 truncate font-medium">
-                          {card.subtitle}
+                    {/* CONTENT (RIGHT) - Grouped Tightly */}
+                    <div className="order-2 flex-1 pl-3 rtl:pl-0 rtl:pr-3 text-right flex flex-col justify-center h-full">
+                      <div>
+                        <p className="text-xs font-semibold text-slate-700 leading-tight mb-0.5 uppercase tracking-wide opacity-90">
+                          {card.title}
                         </p>
-                      )}
+
+                        {/* Number - Balanced & Bold */}
+                        <span className="text-xl font-bold text-slate-800 tabular-nums block tracking-tight leading-none">
+                          <AnimatedNumber value={card.value} />
+                        </span>
+
+                        {(card.subtitle && card.subtitle !== "") && (
+                          <p className="text-[10px] text-slate-400 mt-0.5 truncate font-medium opacity-80">
+                            {card.subtitle}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  </button>
+                );
+              })}
+            </div>
+        )}
+          </div>
+
+      {/* Quick Actions */}
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+          <h2 className="text-lg font-bold text-slate-800 mb-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+            {language === 'ar' ? 'إجراءات سريعة' : 'Quick Actions'}
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {quickActions.map((action) => {
+              const Icon = action.icon;
+              return (
+                <button
+                  key={action.id}
+                  onClick={() => handleNavigate(action.page)}
+                  className={`${action.color} text-white rounded-xl p-4 transition-all duration-200 hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-3`}
+                  dir={language === 'ar' ? 'rtl' : 'ltr'}
+                >
+                  <Icon size={20} />
+                  <span className="font-medium">{action.title}</span>
                 </button>
               );
             })}
           </div>
-        )}
-      </div>
-
-      {/* Quick Actions */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-        <h2 className="text-lg font-bold text-slate-800 mb-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-          {language === 'ar' ? 'إجراءات سريعة' : 'Quick Actions'}
-        </h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {quickActions.map((action) => {
-            const Icon = action.icon;
-            return (
-              <button
-                key={action.id}
-                onClick={() => handleNavigate(action.page)}
-                className={`${action.color} text-white rounded-xl p-4 transition-all duration-200 hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-3`}
-                dir={language === 'ar' ? 'rtl' : 'ltr'}
-              >
-                <Icon size={20} />
-                <span className="font-medium">{action.title}</span>
-              </button>
-            );
-          })}
         </div>
-      </div>
 
-      <AbsentEmployeesModal
-        isOpen={showAbsentModal}
-        onClose={() => setShowAbsentModal(false)}
-        expectedCount={stats.absentToday}
-      />
-    </div>
-  );
+        <AbsentEmployeesModal
+          isOpen={showAbsentModal}
+          onClose={() => setShowAbsentModal(false)}
+          expectedCount={stats.absentToday}
+        />
+      </div>
+      );
 }

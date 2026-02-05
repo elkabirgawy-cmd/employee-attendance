@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import { AlertTriangle, Shield, MapPin, Smartphone, CheckCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
+import AdminPageLayout from '../components/admin/AdminPageLayout';
+import AdminPageHeader from '../components/admin/AdminPageHeader';
+import AdminCard from '../components/admin/AdminCard';
+import { adminTheme } from '../lib/adminTheme';
 
 interface FraudAlertsProps {
   currentPage?: string;
@@ -114,31 +118,28 @@ export default function FraudAlerts({ currentPage }: FraudAlertsProps) {
         <div className="flex gap-2">
           <button
             onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-lg font-medium transition ${
-              filter === 'all'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
-            }`}
+            className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'all'
+              ? 'bg-blue-600 text-white'
+              : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
+              }`}
           >
             {t('fraudAlerts.all')}
           </button>
           <button
             onClick={() => setFilter('unresolved')}
-            className={`px-4 py-2 rounded-lg font-medium transition ${
-              filter === 'unresolved'
-                ? 'bg-red-600 text-white'
-                : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
-            }`}
+            className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'unresolved'
+              ? 'bg-red-600 text-white'
+              : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
+              }`}
           >
             {t('fraudAlerts.unresolved')}
           </button>
           <button
             onClick={() => setFilter('resolved')}
-            className={`px-4 py-2 rounded-lg font-medium transition ${
-              filter === 'resolved'
-                ? 'bg-green-600 text-white'
-                : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
-            }`}
+            className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'resolved'
+              ? 'bg-green-600 text-white'
+              : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
+              }`}
           >
             {t('fraudAlerts.resolved')}
           </button>
@@ -146,31 +147,31 @@ export default function FraudAlerts({ currentPage }: FraudAlertsProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white rounded-xl p-4 border border-slate-200">
+        <AdminCard>
           <p className="text-sm text-slate-600 mb-1">{t('fraudAlerts.totalAlerts')}</p>
           <p className="text-2xl font-bold text-slate-800">{alerts.length}</p>
-        </div>
-        <div className="bg-white rounded-xl p-4 border border-red-200 bg-red-50">
+        </AdminCard>
+        <AdminCard className="border-red-200 bg-red-50">
           <p className="text-sm text-red-600 mb-1">{t('fraudAlerts.critical')}</p>
           <p className="text-2xl font-bold text-red-700">
             {alerts.filter((a) => a.severity === 'critical').length}
           </p>
-        </div>
-        <div className="bg-white rounded-xl p-4 border border-orange-200 bg-orange-50">
+        </AdminCard>
+        <AdminCard className="border-orange-200 bg-orange-50">
           <p className="text-sm text-orange-600 mb-1">{t('fraudAlerts.highPriority')}</p>
           <p className="text-2xl font-bold text-orange-700">
             {alerts.filter((a) => a.severity === 'high').length}
           </p>
-        </div>
-        <div className="bg-white rounded-xl p-4 border border-green-200 bg-green-50">
+        </AdminCard>
+        <AdminCard className="border-green-200 bg-green-50">
           <p className="text-sm text-green-600 mb-1">{t('fraudAlerts.resolved')}</p>
           <p className="text-2xl font-bold text-green-700">
             {alerts.filter((a) => a.is_resolved).length}
           </p>
-        </div>
+        </AdminCard>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200">
+      <AdminCard>
         {loading ? (
           <div className="p-6 space-y-3">
             {[1, 2, 3].map((i) => (
@@ -244,7 +245,7 @@ export default function FraudAlerts({ currentPage }: FraudAlertsProps) {
             ))}
           </div>
         )}
-      </div>
-    </div>
+      </AdminCard>
+    </AdminPageLayout>
   );
 }

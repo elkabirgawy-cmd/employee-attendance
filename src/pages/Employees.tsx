@@ -87,41 +87,24 @@ interface EmployeeFormData {
   income_tax_value: string;
 }
 
+import { useAdminTheme } from '../contexts/AdminThemeContext';
+
 const ITEMS_PER_PAGE = 10;
 
-// Hardcoded theme to prevent Safari ReferenceError crash
-const themeClasses = {
-  button: {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-4 py-2 shadow-sm transition-colors flex items-center gap-2 justify-center'
-  },
-  input: {
-    base: 'w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2 px-3'
-  }
-};
-
-const BUILD_VERSION = "build: 2026-02-05-v1"; // Update this manually on deploy
-
-// TEMP DEBUG: Global error trap
-if (typeof window !== 'undefined') {
-  window.addEventListener('error', e => {
-    if (e.message?.includes('adminTheme') || e.error?.stack?.includes('adminTheme')) {
-      console.error('CRITICAL_DEBUG: adminTheme error trapped:', e.message, e.error?.stack);
-      alert(`DEBUG: adminTheme error: ${e.message}\nStack: ${e.error?.stack}`);
-    }
-  });
-}
+const BUILD_VERSION = "build: 2026-02-05-v2-ZERO-REF"; // Update this manually on deploy
 
 export default function Employees({ currentPage }: EmployeesProps) {
   const { language } = useLanguage();
   const { companyId } = useAuth();
 
+  // Strict usage of theme context - guaranteed to return safe default if context missing
+  const localTheme = useAdminTheme();
+
   // Debug mount
   useEffect(() => {
     console.log('Employees page mounted. Version:', BUILD_VERSION);
-    // Explicitly check if adminTheme exists globally (from our emergency fix)
-    console.log('window.adminTheme status:', (window as any).adminTheme ? 'PRESENT' : 'MISSING');
-  }, []);
-  // const localTheme = useAdminTheme(); // REMOVED to fix Safari crash
+    console.log('Theme loaded:', localTheme ? 'YES' : 'NO');
+  }, [localTheme]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -647,7 +630,7 @@ export default function Employees({ currentPage }: EmployeesProps) {
             }
             setShowAddModal(true);
           }}
-          className={themeClasses.button.primary}
+          className={localTheme.button.primary}
         >
           <Plus size={20} />
           {language === 'ar' ? 'إضافة موظف' : 'Add Employee'}
@@ -667,7 +650,7 @@ export default function Employees({ currentPage }: EmployeesProps) {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as any)}
-            className={themeClasses.input.base}
+            className={localTheme.input.base}
           >
             <option value="all">{language === 'ar' ? 'الحالة: الكل' : 'Status: All'}</option>
             <option value="active">{language === 'ar' ? 'نشط' : 'Active'}</option>
@@ -677,7 +660,7 @@ export default function Employees({ currentPage }: EmployeesProps) {
           <select
             value={filterBranch}
             onChange={(e) => setFilterBranch(e.target.value)}
-            className={themeClasses.input.base}
+            className={localTheme.input.base}
           >
             <option value="all">{language === 'ar' ? 'الفرع: الكل' : 'Branch: All'}</option>
             {branches.map((branch) => (
@@ -690,7 +673,7 @@ export default function Employees({ currentPage }: EmployeesProps) {
           <select
             value={filterShift}
             onChange={(e) => setFilterShift(e.target.value)}
-            className={themeClasses.input.base}
+            className={localTheme.input.base}
           >
             <option value="all">{language === 'ar' ? 'الوردية: الكل' : 'Shift: All'}</option>
             {shifts.map((shift) => (

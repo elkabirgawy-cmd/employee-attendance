@@ -1,5 +1,5 @@
 import { LucideIcon } from 'lucide-react';
-import { adminTheme } from '@/lib/adminTheme';
+
 
 interface AdminEmptyStateProps {
     icon: LucideIcon;

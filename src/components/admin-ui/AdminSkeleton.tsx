@@ -1,4 +1,4 @@
-import { adminTheme } from '@/lib/adminTheme';
+import React from 'react';
 
 interface AdminSkeletonProps {
     className?: string; // Additional classes

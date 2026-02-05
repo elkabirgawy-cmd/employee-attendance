@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
 import { useEffect, useRef } from 'react';
-import { adminTheme } from '@/lib/adminTheme';
+import { useAdminTheme } from '../../contexts/AdminThemeContext';
 
 interface AdminDetailsPanelProps {
     isOpen: boolean;

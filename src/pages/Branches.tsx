@@ -6,7 +6,7 @@ import AdminPageShell from '../components/admin-ui/AdminPageShell';
 import AdminCard from '../components/admin-ui/AdminCard';
 import AdminToolbar from '../components/admin-ui/AdminToolbar';
 import AdminModal from '../components/admin/AdminModal';
-import { adminTheme } from '@/lib/adminTheme';
+import { useAdminTheme } from '../contexts/AdminThemeContext';
 
 interface BranchesProps {
   currentPage?: string;
@@ -86,6 +86,7 @@ const TIMEZONES = [
 
 export default function Branches({ currentPage, onNavigate }: BranchesProps) {
   const { companyId } = useAuth();
+  const theme = useAdminTheme();
   const [branches, setBranches] = useState<Branch[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -403,7 +404,7 @@ export default function Branches({ currentPage, onNavigate }: BranchesProps) {
       actions={
         <button
           onClick={openAddModal}
-          className={adminTheme.button.primary}
+          className={theme.button.primary}
         >
           <Plus size={20} />
           إضافة فرع

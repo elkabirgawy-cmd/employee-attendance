@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { adminTheme } from '../../lib/adminTheme';
+import { useAdminTheme } from '../../contexts/AdminThemeContext';
 import { LucideIcon } from 'lucide-react';
 
 interface AdminStatCardProps {
@@ -22,15 +22,16 @@ interface AdminStatCardProps {
 
 export default function AdminStatCard({ title, value, icon: Icon, trend, status, onClick, className = '', iconClassName }: AdminStatCardProps) {
     const isClickable = !!onClick;
+    const theme = useAdminTheme();
 
     return (
         <div
             onClick={onClick}
-            className={`${adminTheme.classes.cardClass} p-6 flex items-start justify-between ${isClickable ? adminTheme.classes.cardHoverClass + ' cursor-pointer' : ''} ${className}`}
+            className={`${theme.classes.cardClass} p-6 flex items-start justify-between ${isClickable ? theme.classes.cardHoverClass + ' cursor-pointer' : ''} ${className}`}
         >
             <div>
-                <h3 className={adminTheme.classes.statTitleClass}>{title}</h3>
-                <div className={`mt-2 ${adminTheme.classes.statValueClass}`}>
+                <h3 className={theme.classes.statTitleClass}>{title}</h3>
+                <div className={`mt-2 ${theme.classes.statValueClass}`}>
                     {value}
                 </div>
 

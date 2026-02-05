@@ -7,7 +7,7 @@ import { detectReportCapabilities, buildReportQuery, type ReportCapabilities } f
 import AdminPageLayout from '../components/admin/AdminPageLayout';
 import AdminPageHeader from '../components/admin/AdminPageHeader';
 import AdminCard from '../components/admin/AdminCard';
-import { adminTheme } from '@/lib/adminTheme';
+
 
 interface ReportsProps {
   currentPage?: string;

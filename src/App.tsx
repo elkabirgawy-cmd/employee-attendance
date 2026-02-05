@@ -113,13 +113,16 @@ function AppContent() {
 }
 
 import { Toaster } from 'sonner';
+import { AdminThemeProvider } from './contexts/AdminThemeContext';
 
 function App() {
   return (
     <LanguageProvider>
       <AuthProvider>
-        <AppContent />
-        <Toaster position="top-center" richColors />
+        <AdminThemeProvider>
+          <AppContent />
+          <Toaster position="top-center" richColors />
+        </AdminThemeProvider>
       </AuthProvider>
     </LanguageProvider>
   );

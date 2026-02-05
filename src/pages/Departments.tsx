@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import AdminPageLayout from '../components/admin/AdminPageLayout';
 import AdminPageHeader from '../components/admin/AdminPageHeader';
 import AdminCard from '../components/admin/AdminCard';
-import { adminTheme } from '@/lib/adminTheme';
+import { useAdminTheme } from '../contexts/AdminThemeContext';
 
 interface DepartmentsProps {
   currentPage?: string;
@@ -22,6 +22,7 @@ interface Department {
 export default function Departments({ currentPage }: DepartmentsProps) {
   const { language } = useLanguage();
   const { companyId } = useAuth();
+  const theme = useAdminTheme();
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -183,7 +184,7 @@ export default function Departments({ currentPage }: DepartmentsProps) {
         actions={
           <button
             onClick={openAddModal}
-            className={adminTheme.button.primary}
+            className={theme.button.primary}
           >
             <Plus size={20} />
             {language === 'ar' ? 'إضافة قسم' : 'Add Department'}

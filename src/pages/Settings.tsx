@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import AdminPageLayout from '../components/admin/AdminPageLayout';
 import AdminPageHeader from '../components/admin/AdminPageHeader';
-import { adminTheme } from '@/lib/adminTheme';
+
 import { Capacitor } from '@capacitor/core';
 import { Geolocation } from '@capacitor/geolocation';
 import { sendTestPushNotification, requestNativePushPermission, checkNativePushPermission } from '../utils/pushNotifications';
@@ -154,6 +154,7 @@ function PermissionBadge({
 export default function Settings({ currentPage }: SettingsProps) {
   const { t, language, setLanguage } = useLanguage();
   const { user, companyId } = useAuth();
+
   const [loading, setLoading] = useState(false);
   const [calculationSettings, setCalculationSettings] = useState<AttendanceCalculationSettings | null>(null);
   const [autoCheckoutSettings, setAutoCheckoutSettings] = useState<AutoCheckoutSettings | null>(null);

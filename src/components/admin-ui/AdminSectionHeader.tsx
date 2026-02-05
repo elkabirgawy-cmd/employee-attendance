@@ -1,4 +1,4 @@
-import { adminTheme } from '../../lib/adminTheme';
+import { useAdminTheme } from '../../contexts/AdminThemeContext';
 
 interface AdminSectionHeaderProps {
     title: string;
@@ -7,10 +7,11 @@ interface AdminSectionHeaderProps {
 }
 
 export default function AdminSectionHeader({ title, description, className = '' }: AdminSectionHeaderProps) {
+    const theme = useAdminTheme();
     return (
         <div className={`mb-4 ${className}`}>
-            <h2 className={adminTheme.typography.h2}>{title}</h2>
-            {description && <p className={adminTheme.classes.mutedTextClass + ' text-sm mt-1'}>{description}</p>}
+            <h2 className={theme.typography.h2}>{title}</h2>
+            {description && <p className={theme.classes.mutedTextClass + ' text-sm mt-1'}>{description}</p>}
         </div>
     );
 }

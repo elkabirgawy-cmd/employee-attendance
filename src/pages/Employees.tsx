@@ -12,7 +12,7 @@ import AdminSearchInput from '../components/admin-ui/AdminSearchInput';
 import AdminFilterChips, { FilterChip } from '../components/admin-ui/AdminFilterChips';
 import AdminEmptyState from '../components/admin-ui/AdminEmptyState';
 import AdminSkeleton from '../components/admin-ui/AdminSkeleton';
-import { adminTheme } from '@/lib/adminTheme';
+import { useAdminTheme } from '../contexts/AdminThemeContext';
 
 interface EmployeesProps {
   currentPage?: string;
@@ -93,6 +93,7 @@ const ITEMS_PER_PAGE = 10;
 export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
   const { language } = useLanguage();
   const { companyId } = useAuth();
+  const theme = useAdminTheme();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -627,7 +628,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
             }
             setShowAddModal(true);
           }}
-          className={adminTheme.button.primary}
+          className={theme.button.primary}
         >
           <Plus size={20} />
           {language === 'ar' ? 'إضافة موظف' : 'Add Employee'}
@@ -647,7 +648,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as any)}
-            className={adminTheme.input.base}
+            className={theme.input.base}
           >
             <option value="all">{language === 'ar' ? 'الحالة: الكل' : 'Status: All'}</option>
             <option value="active">{language === 'ar' ? 'نشط' : 'Active'}</option>
@@ -657,7 +658,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
           <select
             value={filterBranch}
             onChange={(e) => setFilterBranch(e.target.value)}
-            className={adminTheme.input.base}
+            className={theme.input.base}
           >
             <option value="all">{language === 'ar' ? 'الفرع: الكل' : 'Branch: All'}</option>
             {branches.map((branch) => (
@@ -670,7 +671,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
           <select
             value={filterShift}
             onChange={(e) => setFilterShift(e.target.value)}
-            className={adminTheme.input.base}
+            className={theme.input.base}
           >
             <option value="all">{language === 'ar' ? 'الوردية: الكل' : 'Shift: All'}</option>
             {shifts.map((shift) => (

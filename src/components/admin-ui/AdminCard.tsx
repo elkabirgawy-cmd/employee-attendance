@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { adminTheme } from '../../lib/adminTheme';
+import { useAdminTheme } from '../../contexts/AdminThemeContext';
 
 interface AdminCardProps {
     children: ReactNode;
@@ -12,13 +12,15 @@ interface AdminCardProps {
 }
 
 export default function AdminCard({ children, header, footer, className = '', noPadding = false, interactive = false, onClick }: AdminCardProps) {
+    const theme = useAdminTheme();
+
     return (
         <div
             onClick={onClick}
-            className={`${adminTheme.classes.cardClass} ${interactive ? adminTheme.shadows.hover + ' cursor-pointer' : ''} ${className}`}
+            className={`${theme.classes.cardClass} ${interactive ? theme.shadows.hover + ' cursor-pointer' : ''} ${className}`}
         >
             {header && (
-                <div className={`px-6 py-4 border-b ${adminTheme.colors.border}`}>
+                <div className={`px-6 py-4 border-b ${theme.colors.border}`}>
                     {header}
                 </div>
             )}
@@ -28,7 +30,7 @@ export default function AdminCard({ children, header, footer, className = '', no
             </div>
 
             {footer && (
-                <div className={`px-6 py-4 border-t ${adminTheme.colors.border} bg-slate-50 rounded-b-xl`}>
+                <div className={`px-6 py-4 border-t ${theme.colors.border} bg-slate-50 rounded-b-xl`}>
                     {footer}
                 </div>
             )}

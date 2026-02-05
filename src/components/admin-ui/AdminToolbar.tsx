@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { adminTheme } from '../../lib/adminTheme';
+import { useAdminTheme } from '../../contexts/AdminThemeContext';
 
 interface AdminToolbarProps {
     children: ReactNode;
@@ -8,8 +8,9 @@ interface AdminToolbarProps {
 }
 
 export default function AdminToolbar({ children, className = '', hasSearch = false }: AdminToolbarProps) {
+    const theme = useAdminTheme();
     return (
-        <div className={`flex flex-col md:flex-row md:items-center justify-between ${adminTheme.spacing.controlGap} mb-6 ${className}`}>
+        <div className={`flex flex-col md:flex-row md:items-center justify-between ${theme.spacing.controlGap} mb-6 ${className}`}>
             {children}
         </div>
     );

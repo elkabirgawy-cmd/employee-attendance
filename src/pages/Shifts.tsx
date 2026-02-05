@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import AdminPageLayout from '../components/admin/AdminPageLayout';
 import AdminPageHeader from '../components/admin/AdminPageHeader';
 import AdminCard from '../components/admin/AdminCard';
-import { adminTheme } from '@/lib/adminTheme';
+import { useAdminTheme } from '../contexts/AdminThemeContext';
 
 interface ShiftsProps {
   currentPage?: string;
@@ -24,6 +24,7 @@ interface Shift {
 export default function Shifts({ currentPage }: ShiftsProps) {
   const { t } = useLanguage();
   const { companyId } = useAuth();
+  const theme = useAdminTheme();
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -141,7 +142,7 @@ export default function Shifts({ currentPage }: ShiftsProps) {
         actions={
           <button
             onClick={() => setShowAddModal(true)}
-            className={adminTheme.button.primary}
+            className={theme.button.primary}
           >
             <Plus size={20} />
             {t('shifts.addShift')}

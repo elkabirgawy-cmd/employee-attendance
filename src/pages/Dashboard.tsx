@@ -24,7 +24,7 @@ import AdminPageShell from '../components/admin-ui/AdminPageShell';
 import AdminStatCard from '../components/admin-ui/AdminStatCard';
 import AdminSectionHeader from '../components/admin-ui/AdminSectionHeader';
 import AdminSkeleton from '../components/admin-ui/AdminSkeleton';
-import { adminTheme } from '@/lib/adminTheme';
+import { useAdminTheme } from '../contexts/AdminThemeContext';
 
 interface DashboardProps {
   currentPage?: string;
@@ -46,6 +46,7 @@ interface Stats {
 export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
   const { language } = useLanguage();
   const { companyId } = useAuth();
+  const theme = useAdminTheme();
   const [stats, setStats] = useState<Stats>({
     totalEmployees: 0,
     activeEmployees: 0,
@@ -541,7 +542,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
               <button
                 key={action.id}
                 onClick={() => handleNavigate(action.page)}
-                className={`${action.color} text-white ${adminTheme.radii.card} p-4 transition-all duration-200 hover:shadow-lg active:scale-[0.98] flex flex-col items-center justify-center gap-3 h-24`}
+                className={`${action.color} text-white ${theme.radii.card} p-4 transition-all duration-200 hover:shadow-lg active:scale-[0.98] flex flex-col items-center justify-center gap-3 h-24`}
                 dir={language === 'ar' ? 'rtl' : 'ltr'}
               >
                 <Icon size={24} />

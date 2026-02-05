@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Search, Plus, Edit2, Trash2, UserCheck, UserX, X, Key, Copy, Check, ChevronLeft, ChevronRight, Building2, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, UserCheck, UserX, X, Key, Copy, Check, ChevronLeft, ChevronRight, Building2, Image as ImageIcon } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -99,7 +99,7 @@ const themeClasses = {
   }
 };
 
-export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
+export default function Employees({ currentPage }: EmployeesProps) {
   const { language } = useLanguage();
   const { companyId } = useAuth();
   // const localTheme = useAdminTheme(); // REMOVED to fix Safari crash
@@ -572,20 +572,11 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
     setShowDrawer(true);
   }
 
-  const uniqueDepartments = Array.from(new Set(employees.map(emp => emp.department).filter(Boolean)));
-
   const totalPages = Math.ceil(filteredEmployees.length / ITEMS_PER_PAGE);
   const paginatedEmployees = filteredEmployees.slice(
     (currentPage2 - 1) * ITEMS_PER_PAGE,
     currentPage2 * ITEMS_PER_PAGE
   );
-
-  const activeFiltersCount = [
-    filterStatus !== 'all',
-    filterBranch !== 'all',
-    filterShift !== 'all',
-    searchTerm !== ''
-  ].filter(Boolean).length;
 
   const chips: FilterChip[] = [];
   if (filterStatus !== 'all') {
@@ -741,7 +732,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
                       </tr>
                     </thead>
                     <tbody>
-                      {paginatedEmployees.map((employee, index) => (
+                      {paginatedEmployees.map((employee) => (
                         <tr
                           key={employee.id}
                           className="bg-white border-b border-gray-100 hover:bg-gray-50/50 transition-colors cursor-pointer"

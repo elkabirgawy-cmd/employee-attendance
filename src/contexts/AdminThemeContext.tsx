@@ -6,7 +6,8 @@ type AdminTheme = typeof adminTheme;
 const AdminThemeContext = createContext<AdminTheme>(adminTheme);
 
 export function useAdminTheme() {
-    return useContext(AdminThemeContext);
+    const context = useContext(AdminThemeContext);
+    return context || adminTheme;
 }
 
 export function AdminThemeProvider({ children }: { children: ReactNode }) {

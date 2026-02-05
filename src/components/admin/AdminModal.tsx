@@ -1,6 +1,6 @@
 import React from 'react';
 import { X } from 'lucide-react';
-import { adminTheme } from '../../lib/adminTheme';
+import { useAdminTheme } from '../../contexts/AdminThemeContext';
 
 interface AdminModalProps {
     isOpen: boolean;
@@ -12,6 +12,8 @@ interface AdminModalProps {
 }
 
 export default function AdminModal({ isOpen, onClose, title, children, footer, size = 'md' }: AdminModalProps) {
+    const theme = useAdminTheme();
+
     if (!isOpen) return null;
 
     const maxWidth = {
@@ -23,11 +25,11 @@ export default function AdminModal({ isOpen, onClose, title, children, footer, s
 
     return (
         <>
-            <div className={adminTheme.modal.overlay} onClick={onClose} />
-            <div className={`${adminTheme.modal.content} ${maxWidth}`}>
-                <div className={adminTheme.modal.header}>
-                    <h2 className={adminTheme.modal.title}>{title}</h2>
-                    <button onClick={onClose} className={adminTheme.modal.close}>
+            <div className={theme.modal.overlay} onClick={onClose} />
+            <div className={`${theme.modal.content} ${maxWidth}`}>
+                <div className={theme.modal.header}>
+                    <h2 className={theme.modal.title}>{title}</h2>
+                    <button onClick={onClose} className={theme.modal.close}>
                         <X size={20} />
                     </button>
                 </div>

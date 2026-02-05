@@ -1,5 +1,5 @@
 import React from 'react';
-import { adminTheme } from '../../lib/adminTheme';
+import { useAdminTheme } from '../../contexts/AdminThemeContext';
 
 interface AdminPageHeaderProps {
     title: string;
@@ -8,11 +8,12 @@ interface AdminPageHeaderProps {
 }
 
 export default function AdminPageHeader({ title, subtitle, actions }: AdminPageHeaderProps) {
+    const theme = useAdminTheme();
     return (
-        <div className={adminTheme.header.wrapper}>
+        <div className={theme.header.wrapper}>
             <div>
-                <h1 className={adminTheme.header.title}>{title}</h1>
-                {subtitle && <p className={adminTheme.header.subtitle}>{subtitle}</p>}
+                <h1 className={theme.header.title}>{title}</h1>
+                {subtitle && <p className={theme.header.subtitle}>{subtitle}</p>}
             </div>
             {actions && (
                 <div className="flex flex-wrap items-center gap-3">

@@ -6,9 +6,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { normalizeEgyptPhone } from '../utils/phoneNormalization';
 import Avatar from '../components/Avatar';
 import ImageUpload from '../components/ImageUpload';
-import AdminPageLayout from '../components/admin/AdminPageLayout';
-import AdminPageHeader from '../components/admin/AdminPageHeader';
-import AdminCard from '../components/admin/AdminCard';
+import AdminPageShell from '../components/admin-ui/AdminPageShell';
+import AdminCard from '../components/admin-ui/AdminCard';
+import AdminToolbar from '../components/admin-ui/AdminToolbar';
 import { adminTheme } from '@/lib/adminTheme';
 
 interface EmployeesProps {
@@ -570,26 +570,25 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
   if (currentPage !== 'employees') return null;
 
   return (
-    <AdminPageLayout>
-      <AdminPageHeader
-        title={language === 'ar' ? 'الموظفون' : 'Employees'}
-        subtitle={language === 'ar' ? `إجمالي ${employees.length} موظف` : `Total ${employees.length} employees`}
-        actions={
-          <button
-            onClick={() => {
-              if (branches.length === 0) {
-                alert(language === 'ar' ? 'أضف فرع أولاً' : 'Add a branch first');
-                return;
-              }
-              setShowAddModal(true);
-            }}
-            className={adminTheme.button.primary}
-          >
-            <Plus size={20} />
-            {language === 'ar' ? 'إضافة موظف' : 'Add Employee'}
-          </button>
-        }
-      />
+    <AdminPageShell
+      title={language === 'ar' ? 'الموظفون' : 'Employees'}
+      subtitle={language === 'ar' ? `إجمالي ${employees.length} موظف` : `Total ${employees.length} employees`}
+      actions={
+        <button
+          onClick={() => {
+            if (branches.length === 0) {
+              alert(language === 'ar' ? 'أضف فرع أولاً' : 'Add a branch first');
+              return;
+            }
+            setShowAddModal(true);
+          }}
+          className={adminTheme.button.primary}
+        >
+          <Plus size={20} />
+          {language === 'ar' ? 'إضافة موظف' : 'Add Employee'}
+        </button>
+      }
+    >
 
       {/* Search and Filters */}
       <AdminCard className="mb-6">
@@ -1740,7 +1739,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
           </div>
         )
       }
-    </AdminPageLayout>
+    </AdminPageShell>
 
   );
 }

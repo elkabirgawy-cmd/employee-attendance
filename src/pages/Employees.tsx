@@ -11,6 +11,7 @@ import AdminCard from '../components/admin-ui/AdminCard';
 import AdminSearchInput from '../components/admin-ui/AdminSearchInput';
 import AdminFilterChips, { FilterChip } from '../components/admin-ui/AdminFilterChips';
 import AdminEmptyState from '../components/admin-ui/AdminEmptyState';
+import AdminSkeleton from '../components/admin-ui/AdminSkeleton';
 import { adminTheme } from '@/lib/adminTheme';
 
 interface EmployeesProps {
@@ -691,11 +692,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
         {
           loading ? (
             <div className="space-y-3" >
-              {
-                [1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="bg-white rounded-xl p-5 animate-pulse h-20 border border-slate-200" />
-                ))
-              }
+              <AdminSkeleton type="card" count={5} className="h-20" />
             </div>
           ) : filteredEmployees.length === 0 ? (
             <AdminEmptyState

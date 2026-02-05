@@ -17,9 +17,10 @@ interface AdminStatCardProps {
     };
     onClick?: () => void;
     className?: string; // Add className prop
+    iconClassName?: string;
 }
 
-export default function AdminStatCard({ title, value, icon: Icon, trend, status, onClick, className = '' }: AdminStatCardProps) {
+export default function AdminStatCard({ title, value, icon: Icon, trend, status, onClick, className = '', iconClassName }: AdminStatCardProps) {
     const isClickable = !!onClick;
 
     return (
@@ -54,7 +55,7 @@ export default function AdminStatCard({ title, value, icon: Icon, trend, status,
             </div>
 
             {Icon && (
-                <div className="p-3 bg-slate-50 rounded-lg text-slate-400">
+                <div className={`p-3 rounded-lg ${iconClassName || 'bg-slate-50 text-slate-400'}`}>
                     <Icon size={24} />
                 </div>
             )}

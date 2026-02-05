@@ -7,11 +7,16 @@ interface AdminCardProps {
     footer?: ReactNode;
     className?: string;
     noPadding?: boolean;
+    interactive?: boolean;
+    onClick?: () => void;
 }
 
-export default function AdminCard({ children, header, footer, className = '', noPadding = false }: AdminCardProps) {
+export default function AdminCard({ children, header, footer, className = '', noPadding = false, interactive = false, onClick }: AdminCardProps) {
     return (
-        <div className={`${adminTheme.classes.cardClass} ${className}`}>
+        <div
+            onClick={onClick}
+            className={`${adminTheme.classes.cardClass} ${interactive ? adminTheme.shadows.hover + ' cursor-pointer' : ''} ${className}`}
+        >
             {header && (
                 <div className={`px-6 py-4 border-b ${adminTheme.colors.border}`}>
                     {header}

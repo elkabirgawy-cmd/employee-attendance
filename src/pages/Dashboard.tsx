@@ -15,11 +15,14 @@ import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import AbsentEmployeesModal from '../components/AbsentEmployeesModal';
-import PresentEmployeesPanel from '../components/PresentEmployeesPanel';
+import AttendanceListPanel from '../components/AttendanceListPanel';
+import FraudListPanel from '../components/FraudListPanel';
+import EmployeeListPanel from '../components/EmployeeListPanel';
 import AnimatedNumber from '../components/AnimatedNumber';
 import AdminPageShell from '../components/admin-ui/AdminPageShell';
 import AdminStatCard from '../components/admin-ui/AdminStatCard';
 import AdminSectionHeader from '../components/admin-ui/AdminSectionHeader';
+import AdminSkeleton from '../components/admin-ui/AdminSkeleton';
 import { adminTheme } from '@/lib/adminTheme';
 
 interface DashboardProps {
@@ -56,8 +59,11 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<number>(0);
   const [showAbsentModal, setShowAbsentModal] = useState(false);
-  const [showPresentPanel, setShowPresentPanel] = useState(false);
-  const [presentPanelFilter, setPresentPanelFilter] = useState<'present_now' | 'today_attendance'>('present_now');
+  const [showAttendancePanel, setShowAttendancePanel] = useState(false);
+  const [attendancePanelFilter, setAttendancePanelFilter] = useState<'present_now' | 'today_attendance' | 'late'>('present_now');
+  const [showFraudPanel, setShowFraudPanel] = useState(false);
+  const [showEmployeePanel, setShowEmployeePanel] = useState(false);
+  const [employeePanelFilter, setEmployeePanelFilter] = useState<'all' | 'active'>('active');
   const [dayStatus, setDayStatus] = useState<{
     status: 'WORKDAY' | 'OFFDAY';
     reason: string | null;
@@ -268,15 +274,32 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
       return;
     }
 
+    if (cardId === 'fraud') {
+      setShowFraudPanel(true);
+      return;
+    }
+
+    if (cardId === 'late') {
+      setAttendancePanelFilter('late');
+      setShowAttendancePanel(true);
+      return;
+    }
+
     if (cardId === 'present-now') {
-      setPresentPanelFilter('present_now');
-      setShowPresentPanel(true);
+      setAttendancePanelFilter('present_now');
+      setShowAttendancePanel(true);
       return;
     }
 
     if (page === 'present-today' || cardId === 'attendance') {
-      setPresentPanelFilter('today_attendance');
-      setShowPresentPanel(true);
+      setAttendancePanelFilter('today_attendance');
+      setShowAttendancePanel(true);
+      return;
+    }
+
+    if (cardId === 'employees') {
+      setEmployeePanelFilter('active');
+      setShowEmployeePanel(true);
       return;
     }
 
@@ -326,6 +349,17 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
       iconColor: stats.absentToday === 0 ? 'text-green-600' : 'text-amber-600',
       borderColor: stats.absentToday === 0 ? 'border-green-200' : 'border-amber-200',
       page: 'attendance',
+    },
+    {
+      id: 'late',
+      title: language === 'ar' ? 'المتأخرون' : 'Late Arrivals',
+      value: stats.lateArrivals,
+      subtitle: language === 'ar' ? 'تسجيل بعد الموعد' : 'Checked in late',
+      icon: Clock,
+      iconBg: stats.lateArrivals === 0 ? 'bg-green-50' : 'bg-amber-50',
+      iconColor: stats.lateArrivals === 0 ? 'text-green-600' : 'text-amber-600',
+      borderColor: stats.lateArrivals === 0 ? 'border-green-200' : 'border-amber-200',
+      page: 'late',
     },
     {
       id: 'present-now',
@@ -453,9 +487,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
       {/* Status Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {loading ? (
-          [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <div key={i} className={`${adminTheme.classes.cardClass} h-32 animate-pulse p-6 bg-slate-50`} />
-          ))
+          <AdminSkeleton type="card" count={8} className="h-32" />
         ) : (
           summaryCards.map((card) => {
             const isSelected = selectedCardId === card.id;
@@ -506,10 +538,21 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
         expectedCount={stats.absentToday}
       />
 
-      <PresentEmployeesPanel
-        isOpen={showPresentPanel}
-        onClose={() => setShowPresentPanel(false)}
-        filter={presentPanelFilter}
+      <AttendanceListPanel
+        isOpen={showAttendancePanel}
+        onClose={() => setShowAttendancePanel(false)}
+        filter={attendancePanelFilter}
+      />
+
+      <FraudListPanel
+        isOpen={showFraudPanel}
+        onClose={() => setShowFraudPanel(false)}
+      />
+
+      <EmployeeListPanel
+        isOpen={showEmployeePanel}
+        onClose={() => setShowEmployeePanel(false)}
+        filterType={employeePanelFilter}
       />
     </AdminPageShell>
   );

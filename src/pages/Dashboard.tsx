@@ -418,7 +418,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
             </div>
             <p className="text-slate-500 flex items-center gap-2 text-sm font-medium">
               <span>{new Date().toLocaleDateString(language === 'ar' ? 'ar-EG' : 'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
-              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full"></span>
+              <span className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${flash ? 'bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.6)] scale-125' : 'bg-slate-400 scale-100'}`}></span>
               <span>{language === 'ar' ? 'آخر تحديث:' : 'Updated:'} {formatLastUpdate()}</span>
             </p>
           </div>
@@ -447,13 +447,13 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
       {/* Status Cards */}
       <div className="mb-8">
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="bg-white/60 rounded-xl p-5 animate-pulse h-[96px] border border-white/40 shadow-sm" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2">
             {summaryCards.map((card) => {
               const Icon = card.icon;
               const isSelected = selectedCardId === card.id;

@@ -1740,7 +1740,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
           </div>
         )
       }
-    </div>
-    </AdminPageLayout >
+    </AdminPageLayout>
+
   );
 }

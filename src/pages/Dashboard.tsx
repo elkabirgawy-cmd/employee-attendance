@@ -24,6 +24,8 @@ import AdminPageShell from '../components/admin-ui/AdminPageShell';
 import AdminStatCard from '../components/admin-ui/AdminStatCard';
 import AdminSectionHeader from '../components/admin-ui/AdminSectionHeader';
 import AdminSkeleton from '../components/admin-ui/AdminSkeleton';
+import ServerTimeCard from '../components/ServerTimeCard';
+import { OnboardingSetupCard } from '../components/OnboardingSetupCard';
 import { useAdminTheme } from '../contexts/AdminThemeContext';
 
 interface DashboardProps {

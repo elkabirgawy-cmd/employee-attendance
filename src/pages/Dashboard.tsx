@@ -58,6 +58,16 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
     reason: string | null;
     detail: string | null;
   } | null>(null);
+  const [flash, setFlash] = useState(false);
+
+  // Flash effect on stats update
+  useEffect(() => {
+    if (!loading) {
+      setFlash(true);
+      const t = setTimeout(() => setFlash(false), 500);
+      return () => clearTimeout(t);
+    }
+  }, [stats, loading]);
 
   const refreshDashboardStats = useCallback(async () => {
     if (!companyId) return;

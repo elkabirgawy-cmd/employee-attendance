@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { UserCheck, Clock, MapPin } from 'lucide-react';
+import { UserCheck, Clock, MapPin, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -29,6 +29,7 @@ export default function AttendanceListPanel({ isOpen, onClose, filter }: Attenda
     const { companyId } = useAuth();
     const [records, setRecords] = useState<AttendanceRecord[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     const getTitle = () => {
         switch (filter) {
@@ -56,6 +57,7 @@ export default function AttendanceListPanel({ isOpen, onClose, filter }: Attenda
         if (!companyId) return;
 
         setLoading(true);
+        setError(false);
         try {
             const today = new Date().toISOString().split('T')[0];
             const startOfDay = new Date(today);
@@ -103,6 +105,7 @@ export default function AttendanceListPanel({ isOpen, onClose, filter }: Attenda
             setRecords(formattedData);
         } catch (error) {
             console.error('Error fetching attendance:', error);
+            setError(true);
             setRecords([]);
         } finally {
             setLoading(false);
@@ -143,6 +146,22 @@ export default function AttendanceListPanel({ isOpen, onClose, filter }: Attenda
                 <div className="space-y-3">
                     <AdminSkeleton type="card" count={5} className="h-24" />
                 </div>
+            ) : error ? (
+                <AdminEmptyState
+                    icon={AlertTriangle}
+                    title={language === 'ar' ? 'خطأ في التحميل' : 'Unable to load data'}
+                    description={
+                        language === 'ar'
+                            ? 'حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى.'
+                            : 'An error occurred while fetching records. Please try again.'
+                    }
+                    className="bg-white border-none shadow-none"
+                    action={
+                        <button onClick={fetchAttendance} className="text-sm text-blue-600 hover:underline font-medium">
+                            {language === 'ar' ? 'إعادة المحاولة' : 'Try Again'}
+                        </button>
+                    }
+                />
             ) : records.length === 0 ? (
                 <AdminEmptyState
                     icon={UserCheck}

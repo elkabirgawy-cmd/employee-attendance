@@ -12,6 +12,7 @@ import {
   UserX
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { toast } from 'sonner';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import AbsentEmployeesModal from '../components/AbsentEmployeesModal';
@@ -70,6 +71,20 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
     detail: string | null;
   } | null>(null);
   const [flash, setFlash] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleManualRefresh = async () => {
+    if (isRefreshing) return;
+    setIsRefreshing(true);
+    try {
+      await refreshDashboardStats();
+      toast.success(language === 'ar' ? 'تم تحديث البيانات' : 'Dashboard updated');
+    } catch (error) {
+      // Toast already handled in refreshDashboardStats catch
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   // Flash effect on stats update
   useEffect(() => {
@@ -147,8 +162,9 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
       setLastUpdate(0);
     } catch (error) {
       console.error('Error refreshing dashboard stats:', error);
+      toast.error(language === 'ar' ? 'فشل تحديث الإحصائيات' : 'Failed to refresh dashboard stats');
     }
-  }, [companyId]);
+  }, [companyId, language]);
 
   useEffect(() => {
     if (currentPage === 'dashboard') {
@@ -457,10 +473,14 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                   : (language === 'ar' ? 'يوم عمل' : 'WORK DAY')}
               </span>
             )}
-            <div className="text-xs text-slate-500 flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm">
-              <span className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${flash ? 'bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.6)] scale-125' : 'bg-slate-400 scale-100'}`}></span>
-              <span>{formatLastUpdate()}</span>
-            </div>
+            <button
+              onClick={handleManualRefresh}
+              disabled={isRefreshing}
+              className={`text-xs text-slate-500 flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm transition-all hover:bg-slate-50 active:scale-95 ${isRefreshing ? 'opacity-75 cursor-wait' : 'cursor-pointer'}`}
+            >
+              <div className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${isRefreshing ? 'bg-blue-600 animate-ping' : flash ? 'bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.6)] scale-125' : 'bg-slate-400 scale-100'}`}></div>
+              <span>{isRefreshing ? (language === 'ar' ? 'جاري التحديث...' : 'Updating...') : formatLastUpdate()}</span>
+            </button>
           </div>
           {dayStatus?.status === 'OFFDAY' && dayStatus.detail && (
             <div className="text-xs text-amber-600 font-medium bg-amber-50 px-3 py-1 rounded-lg border border-amber-100">

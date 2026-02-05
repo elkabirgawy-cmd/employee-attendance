@@ -47,7 +47,7 @@ export default function AdminDetailsPanel({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex justify-end isolate">
+        <div className="fixed inset-0 z-[60] flex justify-end isolate">
             {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300"
@@ -89,7 +89,7 @@ export default function AdminDetailsPanel({
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 transition-colors"
+                        className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-500 transition-colors"
                         aria-label="Close panel"
                     >
                         <X size={20} />

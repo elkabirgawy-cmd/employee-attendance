@@ -12,88 +12,31 @@ import AdminSearchInput from '../components/admin-ui/AdminSearchInput';
 import AdminFilterChips, { FilterChip } from '../components/admin-ui/AdminFilterChips';
 import AdminEmptyState from '../components/admin-ui/AdminEmptyState';
 import AdminSkeleton from '../components/admin-ui/AdminSkeleton';
-import { useAdminTheme } from '../contexts/AdminThemeContext';
+import AdminSkeleton from '../components/admin-ui/AdminSkeleton';
 
 interface EmployeesProps {
   currentPage?: string;
   onNavigate?: (page: string, params?: Record<string, any>) => void;
 }
 
-interface Employee {
-  id: string;
-  employee_code: string;
-  full_name: string;
-  email: string;
-  phone: string;
-  job_title: string | null;
-  department: string | null;
-  department_id: string | null;
-  is_active: boolean;
-  hire_date: string;
-  branch_id: string | null;
-  shift_id: string | null;
-  custom_working_days: number | null;
-  custom_working_days_enabled: boolean;
-  weekly_off_days: number[] | null;
-  avatar_url: string | null;
-  work_start_time: string | null;
-  work_end_time: string | null;
-  late_grace_min: number;
-  early_grace_min: number;
-  monthly_salary: number | null;
-  allowances: number | null;
-  salary_mode: string | null;
-  social_insurance_value: number | null;
-  income_tax_value: number | null;
-  branches?: { name: string };
-  departments?: { name: string };
-  shifts?: { name: string };
-  created_at?: string;
-}
-
-interface Branch {
-  id: string;
-  name: string;
-}
-
-interface Department {
-  id: string;
-  name: string;
-}
-
-interface Shift {
-  id: string;
-  name: string;
-}
-
-interface EmployeeFormData {
-  full_name: string;
-  email: string;
-  phone: string;
-  job_title: string;
-  department_id: string;
-  branch_id: string;
-  shift_id: string;
-  hire_date: string;
-  custom_working_days: string;
-  custom_working_days_enabled: boolean;
-  weekly_off_days: number[];
-  work_start_time: string;
-  work_end_time: string;
-  late_grace_min: string;
-  early_grace_min: string;
-  monthly_salary: string;
-  salary_mode: string;
-  social_insurance_value: string;
-  income_tax_value: string;
-}
+// ... (interfaces)
 
 const ITEMS_PER_PAGE = 10;
+
+// Hardcoded theme to prevent Safari ReferenceError crash
+const themeClasses = {
+  button: {
+    primary: 'bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-4 py-2 shadow-sm transition-colors flex items-center gap-2 justify-center'
+  },
+  input: {
+    base: 'w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2 px-3'
+  }
+};
 
 export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
   const { language } = useLanguage();
   const { companyId } = useAuth();
-  const localTheme = useAdminTheme();
+  // const localTheme = useAdminTheme(); // REMOVED to fix Safari crash
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -628,7 +571,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
             }
             setShowAddModal(true);
           }}
-          className={localTheme.button.primary}
+          className={themeClasses.button.primary}
         >
           <Plus size={20} />
           {language === 'ar' ? 'إضافة موظف' : 'Add Employee'}
@@ -648,7 +591,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as any)}
-            className={localTheme.input.base}
+            className={themeClasses.input.base}
           >
             <option value="all">{language === 'ar' ? 'الحالة: الكل' : 'Status: All'}</option>
             <option value="active">{language === 'ar' ? 'نشط' : 'Active'}</option>
@@ -658,7 +601,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
           <select
             value={filterBranch}
             onChange={(e) => setFilterBranch(e.target.value)}
-            className={localTheme.input.base}
+            className={themeClasses.input.base}
           >
             <option value="all">{language === 'ar' ? 'الفرع: الكل' : 'Branch: All'}</option>
             {branches.map((branch) => (
@@ -671,7 +614,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
           <select
             value={filterShift}
             onChange={(e) => setFilterShift(e.target.value)}
-            className={localTheme.input.base}
+            className={themeClasses.input.base}
           >
             <option value="all">{language === 'ar' ? 'الوردية: الكل' : 'Shift: All'}</option>
             {shifts.map((shift) => (

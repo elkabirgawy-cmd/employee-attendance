@@ -99,9 +99,28 @@ const themeClasses = {
   }
 };
 
+const BUILD_VERSION = "build: 2026-02-05-v1"; // Update this manually on deploy
+
+// TEMP DEBUG: Global error trap
+if (typeof window !== 'undefined') {
+  window.addEventListener('error', e => {
+    if (e.message?.includes('adminTheme') || e.error?.stack?.includes('adminTheme')) {
+      console.error('CRITICAL_DEBUG: adminTheme error trapped:', e.message, e.error?.stack);
+      alert(`DEBUG: adminTheme error: ${e.message}\nStack: ${e.error?.stack}`);
+    }
+  });
+}
+
 export default function Employees({ currentPage }: EmployeesProps) {
   const { language } = useLanguage();
   const { companyId } = useAuth();
+
+  // Debug mount
+  useEffect(() => {
+    console.log('Employees page mounted. Version:', BUILD_VERSION);
+    // Explicitly check if adminTheme exists globally (from our emergency fix)
+    console.log('window.adminTheme status:', (window as any).adminTheme ? 'PRESENT' : 'MISSING');
+  }, []);
   // const localTheme = useAdminTheme(); // REMOVED to fix Safari crash
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
@@ -618,7 +637,7 @@ export default function Employees({ currentPage }: EmployeesProps) {
   return (
     <AdminPageShell
       title={language === 'ar' ? 'الموظفون' : 'Employees'}
-      subtitle={language === 'ar' ? `إجمالي ${employees.length} موظف` : `Total ${employees.length} employees`}
+      subtitle={language === 'ar' ? `إجمالي ${employees.length} موظف (${BUILD_VERSION})` : `Total ${employees.length} employees (${BUILD_VERSION})`}
       actions={
         <button
           onClick={() => {

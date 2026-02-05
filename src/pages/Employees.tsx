@@ -8,7 +8,9 @@ import Avatar from '../components/Avatar';
 import ImageUpload from '../components/ImageUpload';
 import AdminPageShell from '../components/admin-ui/AdminPageShell';
 import AdminCard from '../components/admin-ui/AdminCard';
-import AdminToolbar from '../components/admin-ui/AdminToolbar';
+import AdminSearchInput from '../components/admin-ui/AdminSearchInput';
+import AdminFilterChips, { FilterChip } from '../components/admin-ui/AdminFilterChips';
+import AdminEmptyState from '../components/admin-ui/AdminEmptyState';
 import { adminTheme } from '@/lib/adminTheme';
 
 interface EmployeesProps {
@@ -567,6 +569,48 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
     currentPage2 * ITEMS_PER_PAGE
   );
 
+  const activeFiltersCount = [
+    filterStatus !== 'all',
+    filterBranch !== 'all',
+    filterShift !== 'all',
+    searchTerm !== ''
+  ].filter(Boolean).length;
+
+  const chips: FilterChip[] = [];
+  if (filterStatus !== 'all') {
+    chips.push({
+      id: 'status',
+      label: language === 'ar' ? 'الحالة' : 'Status',
+      value: filterStatus === 'active' ? (language === 'ar' ? 'نشط' : 'Active') : (language === 'ar' ? 'موقوف' : 'Inactive'),
+      onRemove: () => setFilterStatus('all')
+    });
+  }
+  if (filterBranch !== 'all') {
+    const branchName = branches.find(b => b.id === filterBranch)?.name || filterBranch;
+    chips.push({
+      id: 'branch',
+      label: language === 'ar' ? 'الفرع' : 'Branch',
+      value: branchName,
+      onRemove: () => setFilterBranch('all')
+    });
+  }
+  if (filterShift !== 'all') {
+    const shiftName = shifts.find(s => s.id === filterShift)?.name || filterShift;
+    chips.push({
+      id: 'shift',
+      label: language === 'ar' ? 'الوردية' : 'Shift',
+      value: shiftName,
+      onRemove: () => setFilterShift('all')
+    });
+  }
+
+  const handleResetFilters = () => {
+    setFilterStatus('all');
+    setFilterBranch('all');
+    setFilterShift('all');
+    setSearchTerm('');
+  };
+
   if (currentPage !== 'employees') return null;
 
   return (
@@ -593,16 +637,11 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
       {/* Search and Filters */}
       <AdminCard className="mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="relative">
-            <Search className="absolute right-3 top-2.5 text-slate-400" size={18} />
-            <input
-              type="text"
-              placeholder={language === 'ar' ? 'بحث بالاسم، الرقم، الهاتف...' : 'Search by name, ID, phone...'}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={adminTheme.input.base}
-            />
-          </div>
+          <AdminSearchInput
+            value={searchTerm}
+            onChange={setSearchTerm}
+            placeholder={language === 'ar' ? 'بحث بالاسم، الرقم، الهاتف...' : 'Search by name, ID, phone...'}
+          />
 
           <select
             value={filterStatus}
@@ -640,6 +679,11 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
             ))}
           </select>
         </div>
+        <AdminFilterChips
+          chips={chips}
+          onReset={handleResetFilters}
+          className="mt-4"
+        />
       </AdminCard>
 
       {/* Content */}
@@ -654,15 +698,11 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
               }
             </div>
           ) : filteredEmployees.length === 0 ? (
-            <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
-              <UserX className="mx-auto text-slate-400 mb-4" size={56} />
-              <p className="text-lg font-semibold text-slate-700 mb-2">
-                {language === 'ar' ? 'لا يوجد موظفون' : 'No employees found'}
-              </p>
-              <p className="text-sm text-slate-500">
-                {language === 'ar' ? 'جرب تعديل البحث أو المرشحات' : 'Try adjusting your search or filters'}
-              </p>
-            </div>
+            <AdminEmptyState
+              icon={UserX}
+              title={language === 'ar' ? 'لا يوجد موظفون' : 'No employees found'}
+              description={language === 'ar' ? 'جرب تعديل البحث أو المرشحات' : 'Try adjusting your search or filters'}
+            />
           ) : (
             <>
               {/* Desktop Table */}

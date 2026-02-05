@@ -14,6 +14,9 @@ import {
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
+import AbsentEmployeesModal from '../components/AbsentEmployeesModal';
+import PresentEmployeesPanel from '../components/PresentEmployeesPanel';
+import AnimatedNumber from '../components/AnimatedNumber';
 import AdminPageShell from '../components/admin-ui/AdminPageShell';
 import AdminStatCard from '../components/admin-ui/AdminStatCard';
 import AdminSectionHeader from '../components/admin-ui/AdminSectionHeader';
@@ -53,6 +56,8 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<number>(0);
   const [showAbsentModal, setShowAbsentModal] = useState(false);
+  const [showPresentPanel, setShowPresentPanel] = useState(false);
+  const [presentPanelFilter, setPresentPanelFilter] = useState<'present_now' | 'today_attendance'>('present_now');
   const [dayStatus, setDayStatus] = useState<{
     status: 'WORKDAY' | 'OFFDAY';
     reason: string | null;
@@ -258,25 +263,24 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
     console.log('📊 Card clicked:', cardName, '-> Navigate to:', page);
     setSelectedCardId(cardId);
 
-    const todayDate = new Date().toISOString().split('T')[0];
-
     if (cardId === 'absent') {
       setShowAbsentModal(true);
-    } else if (cardId === 'present-now') {
-      handleNavigate('attendance', {
-        mode: 'present_now',
-        day: todayDate,
-        branchId: null
-      });
-    } else if (page === 'present-today') {
-      handleNavigate('attendance', {
-        mode: 'present_today',
-        day: todayDate,
-        branchId: null
-      });
-    } else {
-      handleNavigate(page);
+      return;
     }
+
+    if (cardId === 'present-now') {
+      setPresentPanelFilter('present_now');
+      setShowPresentPanel(true);
+      return;
+    }
+
+    if (page === 'present-today' || cardId === 'attendance') {
+      setPresentPanelFilter('today_attendance');
+      setShowPresentPanel(true);
+      return;
+    }
+
+    handleNavigate(page);
   }
 
   if (currentPage !== 'dashboard') return null;
@@ -500,6 +504,12 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
         isOpen={showAbsentModal}
         onClose={() => setShowAbsentModal(false)}
         expectedCount={stats.absentToday}
+      />
+
+      <PresentEmployeesPanel
+        isOpen={showPresentPanel}
+        onClose={() => setShowPresentPanel(false)}
+        filter={presentPanelFilter}
       />
     </AdminPageShell>
   );

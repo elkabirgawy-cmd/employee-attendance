@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { MapPin, Plus, Edit2, Trash2, Radio, X, Navigation, Map, Users } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import AdminPageLayout from '../components/admin/AdminPageLayout';
-import AdminPageHeader from '../components/admin/AdminPageHeader';
-import AdminCard from '../components/admin/AdminCard';
+import AdminPageShell from '../components/admin-ui/AdminPageShell';
+import AdminCard from '../components/admin-ui/AdminCard';
+import AdminToolbar from '../components/admin-ui/AdminToolbar';
 import AdminModal from '../components/admin/AdminModal';
 import { adminTheme } from '@/lib/adminTheme';
 
@@ -397,20 +397,19 @@ export default function Branches({ currentPage, onNavigate }: BranchesProps) {
   if (currentPage !== 'branches') return null;
 
   return (
-    <AdminPageLayout>
-      <AdminPageHeader
-        title="إدارة الفروع"
-        subtitle="إدارة مواقع العمل وإعدادات السياج الجغرافي"
-        actions={
-          <button
-            onClick={openAddModal}
-            className={adminTheme.button.primary}
-          >
-            <Plus size={20} />
-            إضافة فرع
-          </button>
-        }
-      />
+    <AdminPageShell
+      title="إدارة الفروع"
+      subtitle="إدارة مواقع العمل وإعدادات السياج الجغرافي"
+      actions={
+        <button
+          onClick={openAddModal}
+          className={adminTheme.button.primary}
+        >
+          <Plus size={20} />
+          إضافة فرع
+        </button>
+      }
+    >
 
       {loading ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -441,29 +440,48 @@ export default function Branches({ currentPage, onNavigate }: BranchesProps) {
             <AdminCard
               key={branch.id}
               className="hover:shadow-lg transition"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <MapPin className="text-green-600" size={24} />
+              header={
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                      <MapPin className="text-green-600" size={24} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-800">{branch.name}</h3>
+                      <p className="text-sm text-slate-500">{branch.address || 'لا يوجد عنوان'}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-800">{branch.name}</h3>
-                    <p className="text-sm text-slate-500">{branch.address || 'لا يوجد عنوان'}</p>
-                  </div>
+                  {branch.is_active ? (
+                    <span className="px-2.5 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">
+                      نشط
+                    </span>
+                  ) : (
+                    <span className="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-medium rounded">
+                      غير نشط
+                    </span>
+                  )}
                 </div>
-                {branch.is_active ? (
-                  <span className="px-2.5 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">
-                    نشط
-                  </span>
-                ) : (
-                  <span className="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-medium rounded">
-                    غير نشط
-                  </span>
-                )}
-              </div>
-
-              <div className="space-y-3 mb-4">
+              }
+              footer={
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => openEditModal(branch)}
+                    className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-blue-50 hover:bg-blue-100 text-blue-600 font-medium rounded-lg transition"
+                  >
+                    <Edit2 size={16} />
+                    تعديل
+                  </button>
+                  <button
+                    onClick={() => handleDelete(branch)}
+                    className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-red-50 hover:bg-red-100 text-red-600 font-medium rounded-lg transition"
+                  >
+                    <Trash2 size={16} />
+                    حذف
+                  </button>
+                </div>
+              }
+            >
+              <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm">
                   <Users className="text-green-500" size={16} />
                   <span className="text-slate-500 font-medium">عدد الموظفين:</span>
@@ -484,23 +502,6 @@ export default function Branches({ currentPage, onNavigate }: BranchesProps) {
                   <span className="text-slate-500 font-medium">المنطقة الزمنية:</span>
                   <span className="text-slate-700">{branch.timezone}</span>
                 </div>
-              </div>
-
-              <div className="flex items-center gap-2 pt-4 border-t border-slate-200">
-                <button
-                  onClick={() => openEditModal(branch)}
-                  className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-blue-50 hover:bg-blue-100 text-blue-600 font-medium rounded-lg transition"
-                >
-                  <Edit2 size={16} />
-                  تعديل
-                </button>
-                <button
-                  onClick={() => handleDelete(branch)}
-                  className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-red-50 hover:bg-red-100 text-red-600 font-medium rounded-lg transition"
-                >
-                  <Trash2 size={16} />
-                  حذف
-                </button>
               </div>
             </AdminCard>
           ))}
@@ -735,6 +736,6 @@ export default function Branches({ currentPage, onNavigate }: BranchesProps) {
           </div>
         </div>
       )}
-    </AdminPageLayout>
+    </AdminPageShell>
   );
 }

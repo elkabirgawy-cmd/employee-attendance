@@ -109,42 +109,42 @@ export default function FraudAlerts({ currentPage }: FraudAlertsProps) {
   if (currentPage !== 'fraud') return null;
 
   return (
-    <div>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">{t('fraudAlerts.title')}</h1>
-          <p className="text-slate-600">{t('fraudAlerts.subtitle')}</p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'all'
-              ? 'bg-blue-600 text-white'
-              : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
-              }`}
-          >
-            {t('fraudAlerts.all')}
-          </button>
-          <button
-            onClick={() => setFilter('unresolved')}
-            className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'unresolved'
-              ? 'bg-red-600 text-white'
-              : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
-              }`}
-          >
-            {t('fraudAlerts.unresolved')}
-          </button>
-          <button
-            onClick={() => setFilter('resolved')}
-            className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'resolved'
-              ? 'bg-green-600 text-white'
-              : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
-              }`}
-          >
-            {t('fraudAlerts.resolved')}
-          </button>
-        </div>
-      </div>
+    <AdminPageLayout>
+      <AdminPageHeader
+        title={t('fraudAlerts.title')}
+        subtitle={t('fraudAlerts.subtitle')}
+        actions={
+          <div className="flex gap-2">
+            <button
+              onClick={() => setFilter('all')}
+              className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'all'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`}
+            >
+              {t('fraudAlerts.all')}
+            </button>
+            <button
+              onClick={() => setFilter('unresolved')}
+              className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'unresolved'
+                  ? 'bg-red-600 text-white'
+                  : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`}
+            >
+              {t('fraudAlerts.unresolved')}
+            </button>
+            <button
+              onClick={() => setFilter('resolved')}
+              className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'resolved'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`}
+            >
+              {t('fraudAlerts.resolved')}
+            </button>
+          </div>
+        }
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <AdminCard>

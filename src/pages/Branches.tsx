@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 import { MapPin, Plus, Edit2, Trash2, Radio, X, Navigation, Map, Users } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import AdminPageLayout from '../components/admin/AdminPageLayout';
+import AdminPageHeader from '../components/admin/AdminPageHeader';
+import AdminCard from '../components/admin/AdminCard';
+import AdminModal from '../components/admin/AdminModal';
+import { adminTheme } from '../lib/adminTheme';
 
 interface BranchesProps {
   currentPage?: string;
@@ -392,20 +397,20 @@ export default function Branches({ currentPage, onNavigate }: BranchesProps) {
   if (currentPage !== 'branches') return null;
 
   return (
-    <div>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">إدارة الفروع</h1>
-          <p className="text-slate-600">إدارة مواقع العمل وإعدادات السياج الجغرافي</p>
-        </div>
-        <button
-          onClick={openAddModal}
-          className="flex items-center gap-2 px-5 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition"
-        >
-          <Plus size={20} />
-          إضافة فرع
-        </button>
-      </div>
+    <AdminPageLayout>
+      <AdminPageHeader
+        title="إدارة الفروع"
+        subtitle="إدارة مواقع العمل وإعدادات السياج الجغرافي"
+        actions={
+          <button
+            onClick={openAddModal}
+            className={adminTheme.button.primary}
+          >
+            <Plus size={20} />
+            إضافة فرع
+          </button>
+        }
+      />
 
       {loading ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -433,9 +438,9 @@ export default function Branches({ currentPage, onNavigate }: BranchesProps) {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {branches.map((branch) => (
-            <div
+            <AdminCard
               key={branch.id}
-              className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-lg transition"
+              className="hover:shadow-lg transition"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -497,7 +502,7 @@ export default function Branches({ currentPage, onNavigate }: BranchesProps) {
                   حذف
                 </button>
               </div>
-            </div>
+            </AdminCard>
           ))}
         </div>
       )}
@@ -673,9 +678,8 @@ export default function Branches({ currentPage, onNavigate }: BranchesProps) {
                             setTimezoneSearch('');
                             setShowTimezoneDropdown(false);
                           }}
-                          className={`w-full text-right px-4 py-2.5 hover:bg-green-50 transition-colors ${
-                            formData.timezone === tz.value ? 'bg-green-100 font-medium' : ''
-                          }`}
+                          className={`w-full text-right px-4 py-2.5 hover:bg-green-50 transition-colors ${formData.timezone === tz.value ? 'bg-green-100 font-medium' : ''
+                            }`}
                         >
                           {tz.label}
                         </button>
@@ -731,6 +735,6 @@ export default function Branches({ currentPage, onNavigate }: BranchesProps) {
           </div>
         </div>
       )}
-    </div>
+    </AdminPageLayout>
   );
 }

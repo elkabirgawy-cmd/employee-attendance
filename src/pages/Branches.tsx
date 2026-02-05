@@ -6,7 +6,7 @@ import AdminPageLayout from '../components/admin/AdminPageLayout';
 import AdminPageHeader from '../components/admin/AdminPageHeader';
 import AdminCard from '../components/admin/AdminCard';
 import AdminModal from '../components/admin/AdminModal';
-import { adminTheme } from '../lib/adminTheme';
+import { adminTheme } from '@/lib/adminTheme';
 
 interface BranchesProps {
   currentPage?: string;

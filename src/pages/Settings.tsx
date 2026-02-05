@@ -3,6 +3,9 @@ import { Settings as SettingsIcon, Shield, MapPin, Clock, Bell, Globe, Calculato
 import { useLanguage } from '../contexts/LanguageContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import AdminPageLayout from '../components/admin/AdminPageLayout';
+import AdminPageHeader from '../components/admin/AdminPageHeader';
+import { adminTheme } from '@/lib/adminTheme';
 import { Capacitor } from '@capacitor/core';
 import { Geolocation } from '@capacitor/geolocation';
 import { sendTestPushNotification, requestNativePushPermission, checkNativePushPermission } from '../utils/pushNotifications';
@@ -246,7 +249,7 @@ export default function Settings({ currentPage }: SettingsProps) {
   async function requestLocationPermission() {
     if (!Capacitor.isNativePlatform()) {
       try {
-        await navigator.geolocation.getCurrentPosition(() => {}, () => {});
+        await navigator.geolocation.getCurrentPosition(() => { }, () => { });
         await checkLocationPermissionStatus();
       } catch (error) {
         console.error('Error requesting location permission:', error);
@@ -258,7 +261,7 @@ export default function Settings({ currentPage }: SettingsProps) {
       const permission = await Geolocation.requestPermissions();
       setLocationPermissionStatus(
         permission.location === 'granted' ? 'granted' :
-        permission.location === 'denied' ? 'denied' : 'prompt'
+          permission.location === 'denied' ? 'denied' : 'prompt'
       );
     } catch (error) {
       console.error('Error requesting location permission:', error);
@@ -735,13 +738,11 @@ export default function Settings({ currentPage }: SettingsProps) {
   if (currentPage !== 'settings') return null;
 
   return (
-    <div>
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">{t('settings.title')}</h1>
-            <p className="text-slate-600">{t('settings.subtitle')}</p>
-          </div>
+    <AdminPageLayout>
+      <AdminPageHeader
+        title={t('settings.title')}
+        subtitle={t('settings.subtitle')}
+        actions={
           <button
             onClick={() => setShowSelfTest(true)}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -749,8 +750,8 @@ export default function Settings({ currentPage }: SettingsProps) {
             <Wrench className="w-5 h-5" />
             <span>اختبار وإصلاح النظام</span>
           </button>
-        </div>
-      </div>
+        }
+      />
 
       <SystemSelfTestModal
         isOpen={showSelfTest}
@@ -1530,11 +1531,10 @@ export default function Settings({ currentPage }: SettingsProps) {
               </button>
 
               {testPushResult && (
-                <div className={`mt-4 p-4 rounded-lg ${
-                  testPushResult.startsWith('✓')
-                    ? 'bg-green-50 text-green-800 border border-green-200'
-                    : 'bg-red-50 text-red-800 border border-red-200'
-                }`}>
+                <div className={`mt-4 p-4 rounded-lg ${testPushResult.startsWith('✓')
+                  ? 'bg-green-50 text-green-800 border border-green-200'
+                  : 'bg-red-50 text-red-800 border border-red-200'
+                  }`}>
                   {testPushResult}
                 </div>
               )}
@@ -1651,6 +1651,6 @@ export default function Settings({ currentPage }: SettingsProps) {
           </div>
         </CollapsibleSection>
       </div>
-    </div>
+    </AdminPageLayout>
   );
 }

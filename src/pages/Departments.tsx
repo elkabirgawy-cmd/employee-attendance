@@ -3,6 +3,10 @@ import { Plus, Edit2, Trash2, X, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
+import AdminPageLayout from '../components/admin/AdminPageLayout';
+import AdminPageHeader from '../components/admin/AdminPageHeader';
+import AdminCard from '../components/admin/AdminCard';
+import { adminTheme } from '@/lib/adminTheme';
 
 interface DepartmentsProps {
   currentPage?: string;
@@ -172,37 +176,33 @@ export default function Departments({ currentPage }: DepartmentsProps) {
   if (currentPage !== 'departments') return null;
 
   return (
-    <div className="p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800">
-            {language === 'ar' ? 'الأقسام' : 'Departments'}
-          </h1>
-          <p className="text-slate-600 mt-1">
-            {language === 'ar' ? 'إدارة أقسام المؤسسة' : 'Manage organization departments'}
-          </p>
-        </div>
-        <button
-          onClick={openAddModal}
-          className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition"
-        >
-          <Plus size={20} />
-          {language === 'ar' ? 'إضافة قسم' : 'Add Department'}
-        </button>
-      </div>
+    <AdminPageLayout>
+      <AdminPageHeader
+        title={language === 'ar' ? 'الأقسام' : 'Departments'}
+        subtitle={language === 'ar' ? 'إدارة أقسام المؤسسة' : 'Manage organization departments'}
+        actions={
+          <button
+            onClick={openAddModal}
+            className={adminTheme.button.primary}
+          >
+            <Plus size={20} />
+            {language === 'ar' ? 'إضافة قسم' : 'Add Department'}
+          </button>
+        }
+      />
 
       {loading ? (
         <div className="text-center py-12">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       ) : departments.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-xl border border-slate-200">
+        <AdminCard className="text-center py-12">
           <p className="text-slate-600">
             {language === 'ar' ? 'لا توجد أقسام بعد' : 'No departments yet'}
           </p>
-        </div>
+        </AdminCard>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <AdminCard className="overflow-hidden">
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50">
@@ -248,7 +248,7 @@ export default function Departments({ currentPage }: DepartmentsProps) {
               ))}
             </tbody>
           </table>
-        </div>
+        </AdminCard>
       )}
 
       {showAddModal && (
@@ -415,6 +415,6 @@ export default function Departments({ currentPage }: DepartmentsProps) {
           </div>
         </div>
       )}
-    </div>
+    </AdminPageLayout>
   );
 }

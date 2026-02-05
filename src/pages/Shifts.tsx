@@ -3,6 +3,10 @@ import { Clock, Plus, Edit2, Trash2, Save, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
+import AdminPageLayout from '../components/admin/AdminPageLayout';
+import AdminPageHeader from '../components/admin/AdminPageHeader';
+import AdminCard from '../components/admin/AdminCard';
+import { adminTheme } from '@/lib/adminTheme';
 
 interface ShiftsProps {
   currentPage?: string;
@@ -130,20 +134,20 @@ export default function Shifts({ currentPage }: ShiftsProps) {
   if (currentPage !== 'shifts') return null;
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">{t('shifts.title')}</h1>
-          <p className="text-slate-600">{t('shifts.currentShift')}</p>
-        </div>
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition"
-        >
-          <Plus size={20} />
-          {t('shifts.addShift')}
-        </button>
-      </div>
+    <AdminPageLayout>
+      <AdminPageHeader
+        title={t('shifts.title')}
+        subtitle={t('shifts.currentShift')}
+        actions={
+          <button
+            onClick={() => setShowAddModal(true)}
+            className={adminTheme.button.primary}
+          >
+            <Plus size={20} />
+            {t('shifts.addShift')}
+          </button>
+        }
+      />
 
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -156,7 +160,7 @@ export default function Shifts({ currentPage }: ShiftsProps) {
           ))}
         </div>
       ) : shifts.length === 0 ? (
-        <div className="bg-white rounded-xl p-12 text-center border border-slate-200">
+        <AdminCard className="text-center py-12">
           <Clock className="mx-auto text-slate-300 mb-4" size={64} />
           <h3 className="text-xl font-semibold text-slate-700 mb-2">{t('shifts.noShifts')}</h3>
           <p className="text-slate-500 mb-6">{t('shifts.addShift')}</p>
@@ -167,13 +171,13 @@ export default function Shifts({ currentPage }: ShiftsProps) {
             <Plus size={20} />
             {t('shifts.addShift')}
           </button>
-        </div>
+        </AdminCard>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {shifts.map((shift) => (
-            <div
+            <AdminCard
               key={shift.id}
-              className="bg-white rounded-xl p-6 border border-slate-200 hover:shadow-lg transition"
+              className="hover:shadow-lg transition"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -183,11 +187,10 @@ export default function Shifts({ currentPage }: ShiftsProps) {
                   <div>
                     <h3 className="text-lg font-bold text-slate-800">{shift.name}</h3>
                     <span
-                      className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                        shift.is_active
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-slate-100 text-slate-600'
-                      }`}
+                      className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${shift.is_active
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-slate-100 text-slate-600'
+                        }`}
                     >
                       {shift.is_active ? t('common.active') : t('common.inactive')}
                     </span>
@@ -222,7 +225,7 @@ export default function Shifts({ currentPage }: ShiftsProps) {
                   {t('common.delete')}
                 </button>
               </div>
-            </div>
+            </AdminCard>
           ))}
         </div>
       )}
@@ -305,6 +308,6 @@ export default function Shifts({ currentPage }: ShiftsProps) {
           </div>
         </div>
       )}
-    </div>
+    </AdminPageLayout>
   );
 }

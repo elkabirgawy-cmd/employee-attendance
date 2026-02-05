@@ -4,6 +4,10 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { detectReportCapabilities, buildReportQuery, type ReportCapabilities } from '../utils/reportCapabilities';
+import AdminPageLayout from '../components/admin/AdminPageLayout';
+import AdminPageHeader from '../components/admin/AdminPageHeader';
+import AdminCard from '../components/admin/AdminCard';
+import { adminTheme } from '@/lib/adminTheme';
 
 interface ReportsProps {
   currentPage?: string;
@@ -470,8 +474,8 @@ export default function Reports({ currentPage }: ReportsProps) {
     const headers = [...fixedHeaders, ...gpsHeaders, ...deviceHeaders];
     const reportTypeName = reportType === 'daily' ? 'يومي'
       : reportType === 'weekly' ? 'أسبوعي'
-      : reportType === 'monthly' ? 'شهري'
-      : 'مخصص';
+        : reportType === 'monthly' ? 'شهري'
+          : 'مخصص';
 
     const htmlContent = `
       <!DOCTYPE html>
@@ -605,12 +609,12 @@ export default function Reports({ currentPage }: ReportsProps) {
         <div class="footer">
           <p>عدد السجلات: ${records.length}</p>
           <p>إجمالي ساعات العمل: ${(() => {
-            const total = records.reduce((sum, r) => {
-              const hours = parseFloat(r['ساعات العمل']);
-              return sum + (isNaN(hours) ? 0 : hours);
-            }, 0);
-            return total.toFixed(2);
-          })()} ساعة</p>
+        const total = records.reduce((sum, r) => {
+          const hours = parseFloat(r['ساعات العمل']);
+          return sum + (isNaN(hours) ? 0 : hours);
+        }, 0);
+        return total.toFixed(2);
+      })()} ساعة</p>
           <p>تم الإنشاء بواسطة نظام إدارة الحضور</p>
         </div>
       </body>
@@ -902,19 +906,18 @@ export default function Reports({ currentPage }: ReportsProps) {
   const isFormValid = !dateError && reportType && startDate && endDate && format;
 
   return (
-    <div className="pb-6">
+    <AdminPageLayout>
       {toast && (
-        <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-lg shadow-lg ${
-          toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        } text-white font-medium`}>
+        <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-lg shadow-lg ${toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+          } text-white font-medium`}>
           {toast.message}
         </div>
       )}
 
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-slate-800 mb-2">التقارير والتحليلات</h1>
-        <p className="text-slate-600">عرض ملخص الحضور وتحميل التقارير التفصيلية</p>
-      </div>
+      <AdminPageHeader
+        title="التقارير والتحليلات"
+        subtitle="عرض ملخص الحضور وتحميل التقارير التفصيلية"
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
@@ -954,8 +957,7 @@ export default function Reports({ currentPage }: ReportsProps) {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
-        <h2 className="text-xl font-bold text-slate-800 mb-6">إعدادات التقرير</h2>
+      <AdminCard title="إعدادات التقرير" className="mb-6">
 
         <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
           <div className="flex items-center justify-between mb-4">
@@ -1017,11 +1019,10 @@ export default function Reports({ currentPage }: ReportsProps) {
                 <button
                   key={type.id}
                   onClick={() => setReportType(type.id)}
-                  className={`p-4 rounded-xl border-2 transition text-center ${
-                    reportType === type.id
-                      ? 'border-blue-500 bg-blue-50 shadow-md'
-                      : 'border-slate-200 bg-white hover:border-blue-300 hover:shadow-sm'
-                  }`}
+                  className={`p-4 rounded-xl border-2 transition text-center ${reportType === type.id
+                    ? 'border-blue-500 bg-blue-50 shadow-md'
+                    : 'border-slate-200 bg-white hover:border-blue-300 hover:shadow-sm'
+                    }`}
                 >
                   <Icon
                     className={`mx-auto mb-2 ${reportType === type.id ? 'text-blue-600' : 'text-slate-400'}`}
@@ -1044,11 +1045,10 @@ export default function Reports({ currentPage }: ReportsProps) {
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               disabled={reportType !== 'custom'}
-              className={`w-full px-4 py-2.5 border border-slate-300 rounded-lg outline-none transition ${
-                reportType === 'custom'
-                  ? 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                  : 'bg-slate-50 cursor-not-allowed'
-              }`}
+              className={`w-full px-4 py-2.5 border border-slate-300 rounded-lg outline-none transition ${reportType === 'custom'
+                ? 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                : 'bg-slate-50 cursor-not-allowed'
+                }`}
             />
           </div>
           <div>
@@ -1058,11 +1058,10 @@ export default function Reports({ currentPage }: ReportsProps) {
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               disabled={reportType !== 'custom'}
-              className={`w-full px-4 py-2.5 border border-slate-300 rounded-lg outline-none transition ${
-                reportType === 'custom'
-                  ? 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                  : 'bg-slate-50 cursor-not-allowed'
-              }`}
+              className={`w-full px-4 py-2.5 border border-slate-300 rounded-lg outline-none transition ${reportType === 'custom'
+                ? 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                : 'bg-slate-50 cursor-not-allowed'
+                }`}
             />
           </div>
         </div>
@@ -1079,31 +1078,28 @@ export default function Reports({ currentPage }: ReportsProps) {
           <div className="grid grid-cols-3 gap-3">
             <button
               onClick={() => setFormat('xlsx')}
-              className={`py-3 px-4 border-2 rounded-lg font-medium transition ${
-                format === 'xlsx'
-                  ? 'border-green-500 bg-green-50 text-green-700 shadow-md'
-                  : 'border-slate-300 text-slate-700 hover:bg-slate-50'
-              }`}
+              className={`py-3 px-4 border-2 rounded-lg font-medium transition ${format === 'xlsx'
+                ? 'border-green-500 bg-green-50 text-green-700 shadow-md'
+                : 'border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`}
             >
               Excel (.xlsx)
             </button>
             <button
               onClick={() => setFormat('pdf')}
-              className={`py-3 px-4 border-2 rounded-lg font-medium transition ${
-                format === 'pdf'
-                  ? 'border-red-500 bg-red-50 text-red-700 shadow-md'
-                  : 'border-slate-300 text-slate-700 hover:bg-slate-50'
-              }`}
+              className={`py-3 px-4 border-2 rounded-lg font-medium transition ${format === 'pdf'
+                ? 'border-red-500 bg-red-50 text-red-700 shadow-md'
+                : 'border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`}
             >
               PDF (.pdf)
             </button>
             <button
               onClick={() => setFormat('csv')}
-              className={`py-3 px-4 border-2 rounded-lg font-medium transition ${
-                format === 'csv'
-                  ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-md'
-                  : 'border-slate-300 text-slate-700 hover:bg-slate-50'
-              }`}
+              className={`py-3 px-4 border-2 rounded-lg font-medium transition ${format === 'csv'
+                ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-md'
+                : 'border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`}
             >
               CSV (.csv)
             </button>
@@ -1114,11 +1110,10 @@ export default function Reports({ currentPage }: ReportsProps) {
           <label className="block text-sm font-medium text-slate-700 mb-3">خيارات التضمين</label>
           <div className="space-y-3 bg-slate-50 rounded-lg p-4">
             <label
-              className={`flex items-center gap-3 p-2 rounded transition ${
-                capabilities.workHoursSupported
-                  ? 'cursor-pointer hover:bg-white'
-                  : 'cursor-not-allowed opacity-50'
-              }`}
+              className={`flex items-center gap-3 p-2 rounded transition ${capabilities.workHoursSupported
+                ? 'cursor-pointer hover:bg-white'
+                : 'cursor-not-allowed opacity-50'
+                }`}
               title={!capabilities.workHoursSupported ? 'غير متاح - البيانات غير موجودة في قاعدة البيانات' : ''}
             >
               <input
@@ -1131,11 +1126,10 @@ export default function Reports({ currentPage }: ReportsProps) {
               <span className="text-sm text-slate-700 font-medium">تضمين تفاصيل ساعات العمل</span>
             </label>
             <label
-              className={`flex items-center gap-3 p-2 rounded transition ${
-                capabilities.lateDetailsSupported
-                  ? 'cursor-pointer hover:bg-white'
-                  : 'cursor-not-allowed opacity-50'
-              }`}
+              className={`flex items-center gap-3 p-2 rounded transition ${capabilities.lateDetailsSupported
+                ? 'cursor-pointer hover:bg-white'
+                : 'cursor-not-allowed opacity-50'
+                }`}
               title={!capabilities.lateDetailsSupported ? 'غير متاح - البيانات غير موجودة في قاعدة البيانات' : ''}
             >
               <input
@@ -1149,17 +1143,16 @@ export default function Reports({ currentPage }: ReportsProps) {
             </label>
           </div>
         </div>
-      </div>
+      </AdminCard>
 
       <div className="flex flex-col sm:flex-row justify-end gap-3 mb-8">
         <button
           onClick={() => generateReport('preview')}
           disabled={!isFormValid || generating}
-          className={`flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg transition ${
-            !isFormValid || generating
-              ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
-              : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
-          }`}
+          className={`flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg transition ${!isFormValid || generating
+            ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+            : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
+            }`}
         >
           {generating ? (
             <>
@@ -1176,11 +1169,10 @@ export default function Reports({ currentPage }: ReportsProps) {
         <button
           onClick={() => generateReport('download')}
           disabled={!isFormValid || generating}
-          className={`flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg transition ${
-            !isFormValid || generating
-              ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
-              : 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl'
-          }`}
+          className={`flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg transition ${!isFormValid || generating
+            ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+            : 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl'
+            }`}
         >
           {generating ? (
             <>
@@ -1197,8 +1189,7 @@ export default function Reports({ currentPage }: ReportsProps) {
       </div>
 
       {recentReports.length > 0 && (
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
-          <h2 className="text-lg font-bold text-slate-800 mb-4">التقارير الأخيرة</h2>
+        <AdminCard title="التقارير الأخيرة">
           <div className="space-y-3">
             {recentReports.map((report) => (
               <div key={report.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition">
@@ -1245,7 +1236,7 @@ export default function Reports({ currentPage }: ReportsProps) {
               </div>
             ))}
           </div>
-        </div>
+        </AdminCard>
       )}
 
       {showPreviewModal && previewData && (
@@ -1361,6 +1352,6 @@ export default function Reports({ currentPage }: ReportsProps) {
           </div>
         </div>
       )}
-    </div>
+    </AdminPageLayout>
   );
 }

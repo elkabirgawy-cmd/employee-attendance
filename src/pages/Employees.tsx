@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Search, Plus, Edit2, Trash2, UserCheck, UserX, Filter, X, Key, Copy, Check, ChevronLeft, ChevronRight, Building2, Calendar, Image as ImageIcon } from 'lucide-react';
+import { Search, Plus, Edit2, Trash2, UserCheck, UserX, X, Key, Copy, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,7 +9,7 @@ import ImageUpload from '../components/ImageUpload';
 import AdminPageLayout from '../components/admin/AdminPageLayout';
 import AdminPageHeader from '../components/admin/AdminPageHeader';
 import AdminCard from '../components/admin/AdminCard';
-import AdminModal from '../components/admin/AdminModal';
+import { adminTheme } from '@/lib/adminTheme';
 
 interface EmployeesProps {
   currentPage?: string;

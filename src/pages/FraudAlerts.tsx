@@ -5,7 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import AdminPageLayout from '../components/admin/AdminPageLayout';
 import AdminPageHeader from '../components/admin/AdminPageHeader';
 import AdminCard from '../components/admin/AdminCard';
-import { adminTheme } from '../lib/adminTheme';
+import { adminTheme } from '@/lib/adminTheme';
 
 interface FraudAlertsProps {
   currentPage?: string;
@@ -118,8 +118,8 @@ export default function FraudAlerts({ currentPage }: FraudAlertsProps) {
             <button
               onClick={() => setFilter('all')}
               className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'all'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
                 }`}
             >
               {t('fraudAlerts.all')}
@@ -127,8 +127,8 @@ export default function FraudAlerts({ currentPage }: FraudAlertsProps) {
             <button
               onClick={() => setFilter('unresolved')}
               className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'unresolved'
-                  ? 'bg-red-600 text-white'
-                  : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
+                ? 'bg-red-600 text-white'
+                : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
                 }`}
             >
               {t('fraudAlerts.unresolved')}
@@ -136,8 +136,8 @@ export default function FraudAlerts({ currentPage }: FraudAlertsProps) {
             <button
               onClick={() => setFilter('resolved')}
               className={`px-4 py-2 rounded-lg font-medium transition ${filter === 'resolved'
-                  ? 'bg-green-600 text-white'
-                  : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
+                ? 'bg-green-600 text-white'
+                : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
                 }`}
             >
               {t('fraudAlerts.resolved')}

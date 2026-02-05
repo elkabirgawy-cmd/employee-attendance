@@ -93,7 +93,7 @@ const ITEMS_PER_PAGE = 10;
 export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
   const { language } = useLanguage();
   const { companyId } = useAuth();
-  const theme = useAdminTheme();
+  const localTheme = useAdminTheme();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -628,7 +628,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
             }
             setShowAddModal(true);
           }}
-          className={theme.button.primary}
+          className={localTheme.button.primary}
         >
           <Plus size={20} />
           {language === 'ar' ? 'إضافة موظف' : 'Add Employee'}
@@ -648,7 +648,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as any)}
-            className={theme.input.base}
+            className={localTheme.input.base}
           >
             <option value="all">{language === 'ar' ? 'الحالة: الكل' : 'Status: All'}</option>
             <option value="active">{language === 'ar' ? 'نشط' : 'Active'}</option>
@@ -658,7 +658,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
           <select
             value={filterBranch}
             onChange={(e) => setFilterBranch(e.target.value)}
-            className={theme.input.base}
+            className={localTheme.input.base}
           >
             <option value="all">{language === 'ar' ? 'الفرع: الكل' : 'Branch: All'}</option>
             {branches.map((branch) => (
@@ -671,7 +671,7 @@ export default function Employees({ currentPage, onNavigate }: EmployeesProps) {
           <select
             value={filterShift}
             onChange={(e) => setFilterShift(e.target.value)}
-            className={theme.input.base}
+            className={localTheme.input.base}
           >
             <option value="all">{language === 'ar' ? 'الوردية: الكل' : 'Shift: All'}</option>
             {shifts.map((shift) => (

@@ -30,7 +30,7 @@ interface Employee {
 }
 
 export default function FreeTasks({ currentPage }: FreeTasksProps) {
-  const { companyId } = useAuth();
+  const { companyId, user } = useAuth();
 
   const [freeTasks, setFreeTasks] = useState<FreeTask[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);

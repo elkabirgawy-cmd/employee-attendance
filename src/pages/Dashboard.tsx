@@ -14,10 +14,10 @@ import {
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
-import ServerTimeCard from '../components/ServerTimeCard';
-import { OnboardingSetupCard } from '../components/OnboardingSetupCard';
-import AbsentEmployeesModal from '../components/AbsentEmployeesModal';
-import AnimatedNumber from '../components/AnimatedNumber';
+import AdminPageShell from '../components/admin-ui/AdminPageShell';
+import AdminStatCard from '../components/admin-ui/AdminStatCard';
+import AdminSectionHeader from '../components/admin-ui/AdminSectionHeader';
+import { adminTheme } from '@/lib/adminTheme';
 
 interface DashboardProps {
   currentPage?: string;
@@ -401,154 +401,95 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
   ];
 
   return (
-    <div className="min-h-full bg-slate-200 -m-4 p-4 lg:-m-6 lg:p-6 pb-24">
-      {/* Server Time Card */}
-      <ServerTimeCard />
-
-      {/* Page Header */}
-      <div className="mb-8 pt-2">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-bold text-slate-800 tracking-tight">
-                {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
-              </h1>
-              {dayStatus && (
-                <span
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border backdrop-blur-md shadow-sm ${dayStatus.status === 'OFFDAY'
-                    ? 'bg-amber-50/80 text-amber-700 border-amber-200'
-                    : 'bg-emerald-50/80 text-emerald-700 border-emerald-200'
-                    }`}
-                >
-                  {dayStatus.status === 'OFFDAY'
-                    ? (language === 'ar' ? 'إجازة' : 'OFF DAY')
-                    : (language === 'ar' ? 'يوم عمل' : 'WORK DAY')}
-                </span>
-              )}
-            </div>
-            <p className="text-slate-500 flex items-center gap-2 text-sm font-medium">
-              <span>{new Date().toLocaleDateString(language === 'ar' ? 'ar-EG' : 'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+    <AdminPageShell
+      title={language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
+      subtitle={new Date().toLocaleDateString(language === 'ar' ? 'ar-EG' : 'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+      actions={
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center gap-3">
+            {dayStatus && (
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border shadow-sm ${dayStatus.status === 'OFFDAY'
+                  ? 'bg-amber-50 text-amber-700 border-amber-200'
+                  : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  }`}
+              >
+                {dayStatus.status === 'OFFDAY'
+                  ? (language === 'ar' ? 'إجازة' : 'OFF DAY')
+                  : (language === 'ar' ? 'يوم عمل' : 'WORK DAY')}
+              </span>
+            )}
+            <div className="text-xs text-slate-500 flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm">
               <span className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${flash ? 'bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.6)] scale-125' : 'bg-slate-400 scale-100'}`}></span>
-              <span>{language === 'ar' ? 'آخر تحديث:' : 'Updated:'} {formatLastUpdate()}</span>
-            </p>
+              <span>{formatLastUpdate()}</span>
+            </div>
           </div>
-
           {dayStatus?.status === 'OFFDAY' && dayStatus.detail && (
-            <div className="px-5 py-3 bg-white/60 border border-white/60 rounded-2xl text-amber-700 text-sm font-medium shadow-sm backdrop-blur-md">
+            <div className="text-xs text-amber-600 font-medium bg-amber-50 px-3 py-1 rounded-lg border border-amber-100">
               {dayStatus.reason === 'weekly_off'
                 ? language === 'ar' ? `إجازة أسبوعية (${dayStatus.detail})` : `Weekly Off (${dayStatus.detail})`
                 : dayStatus.detail}
             </div>
           )}
         </div>
-      </div>
+      }
+    >
+      {/* Server Time Card - Keeping prominent but integrated */}
+      <ServerTimeCard />
 
       {/* Onboarding Setup Card */}
       {companyId && (
-        <div className="mb-6">
-          <OnboardingSetupCard
-            companyId={companyId}
-            onNavigateToBranches={() => handleNavigate('branches', { openAddModal: true })}
-            onNavigateToEmployees={() => handleNavigate('employees', { openAddModal: true })}
-          />
-        </div>
+        <OnboardingSetupCard
+          companyId={companyId}
+          onNavigateToBranches={() => handleNavigate('branches', { openAddModal: true })}
+          onNavigateToEmployees={() => handleNavigate('employees', { openAddModal: true })}
+        />
       )}
 
       {/* Status Cards */}
-      <div className="mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white/60 rounded-xl p-5 animate-pulse h-[96px] border border-white/40 shadow-sm" />
-            ))}
-          </div>
+          [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+            <div key={i} className={`${adminTheme.classes.cardClass} h-32 animate-pulse p-6 bg-slate-50`} />
+          ))
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2">
-            {summaryCards.map((card) => {
-              const Icon = card.icon;
-              const isSelected = selectedCardId === card.id;
+          summaryCards.map((card) => {
+            const isSelected = selectedCardId === card.id;
 
-              return (
-                <button
-                  key={card.id}
-                  onClick={() => handleCardClick(card.page, card.title, card.id)}
-                  className={`
-                    group
-                    relative
-                    flex items-center justify-between
-                    h-[96px]
-                    px-4 py-3
-                    rounded-xl
-                    bg-white
-                    shadow-sm hover:shadow-md
-                    border border-slate-200
-                    transition-all duration-200 ease-out
-                    active:scale-[0.99]
-                    w-full
-                    rtl:flex-row-reverse
-                    overflow-hidden
-                    ${isSelected ? 'ring-2 ring-blue-600/10 border-blue-600/30 bg-blue-50/5' : ''}
-                  `}
-                  dir={language === 'ar' ? 'rtl' : 'ltr'}
-                >
-                  {/* LEFT ICON */}
-                  <div className="order-1 shrink-0 opacity-50 group-hover:opacity-100 transition-opacity">
-                    <div className={`
-                      w-9 h-9
-                      rounded-lg
-                      bg-slate-50
-                      flex items-center justify-center
-                      border border-slate-100
-                      group-hover:scale-105 transition-transform duration-300
-                      ${card.iconColor}
-                    `}>
-                      <Icon size={18} strokeWidth={2} className="transform scale-90" />
-                    </div>
-                  </div>
-
-                  {/* CONTENT (RIGHT) - Grouped Tightly */}
-                  <div className="order-2 flex-1 pl-3 rtl:pl-0 rtl:pr-3 text-right flex flex-col justify-center h-full">
-                    <div className="flex flex-col justify-center">
-                      <p className="text-sm font-semibold text-slate-700 leading-none mb-0.5">
-                        {card.title}
-                      </p>
-
-                      {/* Number - Bold & Balanced */}
-                      <span className="text-2xl font-bold text-slate-800 tabular-nums block tracking-tight leading-none">
-                        <AnimatedNumber value={card.value} />
-                      </span>
-
-                      {(card.subtitle && card.subtitle !== "") && (
-                        <p className="text-[10px] text-slate-500 mt-0.5 truncate font-medium opacity-60">
-                          {card.subtitle}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+            return (
+              <AdminStatCard
+                key={card.id}
+                title={card.title}
+                value={<AnimatedNumber value={card.value} />}
+                icon={card.icon}
+                iconClassName={`${card.iconBg} ${card.iconColor}`}
+                onClick={() => handleCardClick(card.page, card.title, card.id)}
+                className={`h-full ${isSelected ? 'ring-2 ring-blue-500 border-blue-500 bg-blue-50/10' : ''}`}
+                trend={undefined} // Could add trend logic if available
+              />
+            );
+          })
         )}
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-        <h2 className="text-lg font-bold text-slate-800 mb-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-          {language === 'ar' ? 'إجراءات سريعة' : 'Quick Actions'}
-        </h2>
+      <div>
+        <AdminSectionHeader title={language === 'ar' ? 'إجراءات سريعة' : 'Quick Actions'} />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map((action) => {
             const Icon = action.icon;
+            // Extract color class to apply to bg/text cleanly if possible, or use inline style for complex gradients
+            // quickActions use full classes like 'bg-blue-500 hover:bg-blue-600'
+            // I'll keep the button style but make it consistent with AdminCard
             return (
               <button
                 key={action.id}
                 onClick={() => handleNavigate(action.page)}
-                className={`${action.color} text-white rounded-xl p-4 transition-all duration-200 hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-3`}
+                className={`${action.color} text-white ${adminTheme.radii.card} p-4 transition-all duration-200 hover:shadow-lg active:scale-[0.98] flex flex-col items-center justify-center gap-3 h-24`}
                 dir={language === 'ar' ? 'rtl' : 'ltr'}
               >
-                <Icon size={20} />
-                <span className="font-medium">{action.title}</span>
+                <Icon size={24} />
+                <span className="font-bold text-sm">{action.title}</span>
               </button>
             );
           })}
@@ -560,6 +501,6 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
         onClose={() => setShowAbsentModal(false)}
         expectedCount={stats.absentToday}
       />
-    </div>
+    </AdminPageShell>
   );
 }

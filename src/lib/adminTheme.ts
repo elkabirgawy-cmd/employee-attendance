@@ -1,13 +1,82 @@
 export const adminTheme = {
     colors: {
         bg: 'bg-slate-200', // Matches Dashboard Update
+        surface: 'bg-white',
         text: {
             primary: 'text-slate-800',
             secondary: 'text-slate-500',
             tertiary: 'text-slate-400',
+            inverted: 'text-white'
         },
         border: 'border-slate-200',
+        accent: {
+            primary: 'bg-blue-600',
+            hover: 'hover:bg-blue-700',
+            light: 'bg-blue-50',
+            text: 'text-blue-600'
+        },
+        success: {
+            bg: 'bg-green-50',
+            text: 'text-green-700',
+            icon: 'text-green-600'
+        },
+        warning: {
+            bg: 'bg-amber-50',
+            text: 'text-amber-700',
+            icon: 'text-amber-600'
+        },
+        danger: {
+            bg: 'bg-red-50',
+            text: 'text-red-700',
+            icon: 'text-red-600'
+        }
     },
+    spacing: {
+        pagePadding: 'p-6 md:p-8',
+        sectionGap: 'gap-6 md:gap-8',
+        cardGap: 'gap-4 md:gap-6',
+        controlGap: 'gap-3'
+    },
+    radii: {
+        card: 'rounded-xl',
+        input: 'rounded-lg',
+        pill: 'rounded-full',
+        button: 'rounded-lg'
+    },
+    shadows: {
+        card: 'shadow-sm',
+        hover: 'hover:shadow-md transition-shadow duration-200'
+    },
+    typography: {
+        title: 'text-2xl font-bold text-slate-800',
+        h1: 'text-xl font-bold text-slate-800',
+        h2: 'text-lg font-semibold text-slate-800',
+        label: 'text-sm font-medium text-slate-700',
+        value: 'text-slate-900 font-semibold',
+        meta: 'text-xs text-slate-500'
+    },
+    motion: {
+        duration: 'duration-200',
+        easing: 'ease-in-out'
+    },
+    // Layout Helpers
+    layout: {
+        page: 'min-h-screen bg-slate-200 pb-12',
+        container: 'max-w-7xl mx-auto w-full'
+    },
+    // Component Helpers for Tailwind
+    classes: {
+        pageClass: 'min-h-screen bg-slate-200 pb-12',
+        containerClass: 'max-w-7xl mx-auto w-full p-4 md:p-8 space-y-6',
+        cardClass: 'bg-white rounded-xl shadow-sm border border-slate-200',
+        cardHoverClass: 'hover:shadow-md transition-shadow duration-200',
+        headerClass: 'flex flex-col md:flex-row md:items-center justify-between gap-4',
+        subHeaderClass: 'text-sm text-slate-500 mt-1',
+        statTitleClass: 'text-sm font-medium text-slate-500',
+        statValueClass: 'text-2xl font-bold text-slate-900 tracking-tight',
+        mutedTextClass: 'text-slate-500'
+    },
+    // Legacy support (to be deprecated)
     card: {
         base: 'bg-white rounded-xl shadow-sm border border-slate-200',
         padding: 'p-4 md:p-6',

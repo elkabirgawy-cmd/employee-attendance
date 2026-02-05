@@ -22,6 +22,7 @@ import EmployeeDelayPermissionModal from '../components/EmployeeDelayPermissionM
 import BranchDebugPanel from '../components/BranchDebugPanel';
 import { useFCM } from '../hooks/useFCM';
 
+
 interface Employee {
   id: string;
   full_name: string;
@@ -70,6 +71,7 @@ const nightTheme: Theme = {
 const DEBUG_LOCATION_RECOVERY = false;
 
 export default function EmployeeApp() {
+
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [currentLog, setCurrentLog] = useState<AttendanceLog | null>(null);
   const [timeSync, setTimeSync] = useState<TimeSync | null>(null);
@@ -220,8 +222,8 @@ export default function EmployeeApp() {
     const Δλ = (lon2 - lon1) * Math.PI / 180;
 
     const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-            Math.cos(φ1) * Math.cos(φ2) *
-            Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+      Math.cos(φ1) * Math.cos(φ2) *
+      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return R * c;
@@ -554,17 +556,17 @@ export default function EmployeeApp() {
     const lastFixAgeSec = lastFixAtMs ? Math.floor((nowMs - lastFixAtMs) / 1000) : null;
 
     const isFresh = locationHealth.permission === 'granted' &&
-                    lastFixAtMs !== null &&
-                    lastFixAgeSec !== null &&
-                    lastFixAgeSec <= 30;
+      lastFixAtMs !== null &&
+      lastFixAgeSec !== null &&
+      lastFixAgeSec <= 30;
 
     const isDisabled = locationHealth.permission === 'denied' ||
-                       locationHealth.permission === 'prompt';
+      locationHealth.permission === 'prompt';
 
     const isStale = locationHealth.permission === 'granted' &&
-                    lastFixAtMs !== null &&
-                    lastFixAgeSec !== null &&
-                    lastFixAgeSec > 60;
+      lastFixAtMs !== null &&
+      lastFixAgeSec !== null &&
+      lastFixAgeSec > 60;
 
     if (DEBUG_LOCATION_RECOVERY && newLocation?.timestamp) {
       console.log('[updateLocationHealth] Updated health metrics:', {
@@ -2395,8 +2397,8 @@ export default function EmployeeApp() {
         const checkoutReason = autoCheckoutRef.current.reason === 'LOCATION_DISABLED'
           ? 'LOCATION_DISABLED'
           : autoCheckoutRef.current.reason === 'OUT_OF_BRANCH'
-          ? 'OUT_OF_BRANCH'
-          : 'AUTO';
+            ? 'OUT_OF_BRANCH'
+            : 'AUTO';
 
         await supabase
           .from('attendance_logs')
@@ -3099,10 +3101,10 @@ export default function EmployeeApp() {
                 background: preCheckInVerifying
                   ? 'linear-gradient(135deg, #4A8CDB 0%, #3B6FB6 100%)'
                   : autoCheckout.active
-                  ? 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)'
-                  : currentLog
-                  ? 'linear-gradient(135deg, #FF3B30 0%, #FFB300 100%)'
-                  : 'linear-gradient(135deg, #3ED598 0%, #2EBD7F 100%)',
+                    ? 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)'
+                    : currentLog
+                      ? 'linear-gradient(135deg, #FF3B30 0%, #FFB300 100%)'
+                      : 'linear-gradient(135deg, #3ED598 0%, #2EBD7F 100%)',
                 boxShadow: '0 10px 24px rgba(30,55,90,0.2)'
               }}
             >

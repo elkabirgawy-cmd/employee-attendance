@@ -12,7 +12,6 @@ import AdminSearchInput from '../components/admin-ui/AdminSearchInput';
 import AdminFilterChips, { FilterChip } from '../components/admin-ui/AdminFilterChips';
 import AdminEmptyState from '../components/admin-ui/AdminEmptyState';
 import AdminSkeleton from '../components/admin-ui/AdminSkeleton';
-import AdminSkeleton from '../components/admin-ui/AdminSkeleton';
 
 interface EmployeesProps {
   currentPage?: string;

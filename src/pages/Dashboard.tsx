@@ -464,7 +464,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
     >
       {/* Custom Compact Header */}
       {/* Custom Compact Header Area */}
-      <div className="mb-4 space-y-3">
+      <div className="mb-2 space-y-2">
         {/* 1. Time Card FIRST */}
         <ServerTimeCard />
 
@@ -502,7 +502,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
 
       {/* Onboarding Setup Card */}
       {companyId && (
-        <div className="mb-4">
+        <div className="mb-2">
           <OnboardingSetupCard
             companyId={companyId}
             onNavigateToBranches={() => handleNavigate('branches', { openAddModal: true })}
@@ -512,7 +512,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
       )}
 
       {/* Vertical Stats Stack (Mobile First) */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
         {loading ? (
           <AdminSkeleton type="card" count={7} className="h-24" />
         ) : (

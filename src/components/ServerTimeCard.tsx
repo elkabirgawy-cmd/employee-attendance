@@ -131,7 +131,7 @@ export default function ServerTimeCard({
     : 'bg-gradient-to-br from-indigo-400 to-purple-500';
 
   return (
-    <div className="bg-white border border-slate-200 border-l-4 border-l-blue-600 rounded-2xl shadow-lg p-6 overflow-hidden mb-6 transition-all duration-300 min-h-[120px] flex flex-col justify-center relative z-10">
+    <div className="bg-white border border-slate-200 border-l-4 border-l-blue-600 rounded-2xl shadow-lg p-8 overflow-hidden mb-6 transition-all duration-300 min-h-[140px] flex flex-col justify-center relative z-10">
       <div className="flex items-center justify-between gap-6">
         <div className="flex-shrink-0">
           <div className={`w-16 h-16 rounded-2xl ${iconBgColor} flex items-center justify-center shadow-lg transform transition-all duration-500`}>

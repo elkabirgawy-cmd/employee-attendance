@@ -459,58 +459,60 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
 
   return (
     <AdminPageShell
-      title={language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
-      subtitle={new Date().toLocaleDateString(language === 'ar' ? 'ar-EG' : 'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-      actions={
-        <div className="flex flex-col items-end gap-2">
-          <div className="flex items-center gap-3">
-            {dayStatus && (
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border shadow-sm ${dayStatus.status === 'OFFDAY'
-                  ? 'bg-amber-50 text-amber-700 border-amber-200'
-                  : 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                  }`}
-              >
-                {dayStatus.status === 'OFFDAY'
-                  ? (language === 'ar' ? 'إجازة' : 'OFF DAY')
-                  : (language === 'ar' ? 'يوم عمل' : 'WORK DAY')}
-              </span>
-            )}
-            <button
-              onClick={handleManualRefresh}
-              disabled={isRefreshing}
-              className={`text-xs text-slate-500 flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm transition-all hover:bg-slate-50 active:scale-95 ${isRefreshing ? 'opacity-75 cursor-wait' : 'cursor-pointer'}`}
-            >
-              <div className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${isRefreshing ? 'bg-blue-600 animate-ping' : flash ? 'bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.6)] scale-125' : 'bg-slate-400 scale-100'}`}></div>
-              <span>{isRefreshing ? (language === 'ar' ? 'جاري التحديث...' : 'Updating...') : formatLastUpdate()}</span>
-            </button>
-          </div>
-          {dayStatus?.status === 'OFFDAY' && dayStatus.detail && (
-            <div className="text-xs text-amber-600 font-medium bg-amber-50 px-3 py-1 rounded-lg border border-amber-100">
-              {dayStatus.reason === 'weekly_off'
-                ? language === 'ar' ? `إجازة أسبوعية (${dayStatus.detail})` : `Weekly Off (${dayStatus.detail})`
-                : dayStatus.detail}
-            </div>
-          )}
-        </div>
-      }
+      title=" "
+      subtitle=""
     >
-      {/* Server Time Card - Keeping prominent but integrated */}
-      <ServerTimeCard />
+      {/* Custom Compact Header */}
+      <div className="-mt-8 mb-4">
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-2xl font-bold text-slate-800">
+            {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
+          </h1>
+        </div>
+
+        <div className="flex items-center gap-3 text-sm mb-4">
+          {dayStatus && (
+            <span
+              className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider border shadow-sm ${dayStatus.status === 'OFFDAY'
+                ? 'bg-amber-50 text-amber-700 border-amber-200'
+                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                }`}
+            >
+              {dayStatus.status === 'OFFDAY'
+                ? (language === 'ar' ? 'إجازة' : 'OFF DAY')
+                : (language === 'ar' ? 'يوم عمل' : 'WORK DAY')}
+            </span>
+          )}
+
+          <button
+            onClick={handleManualRefresh}
+            disabled={isRefreshing}
+            className={`text-xs text-slate-500 flex items-center gap-2 bg-white px-2 py-0.5 rounded-full border border-slate-200 shadow-sm transition-all hover:bg-slate-50 active:scale-95 ${isRefreshing ? 'opacity-75 cursor-wait' : 'cursor-pointer'}`}
+          >
+            <div className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${isRefreshing ? 'bg-blue-600 animate-ping' : flash ? 'bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.6)] scale-125' : 'bg-slate-400 scale-100'}`}></div>
+            <span>{isRefreshing ? (language === 'ar' ? 'جاري التحديث...' : 'Updating...') : formatLastUpdate()}</span>
+          </button>
+        </div>
+
+        {/* Server Time Card */}
+        <ServerTimeCard />
+      </div>
 
       {/* Onboarding Setup Card */}
       {companyId && (
-        <OnboardingSetupCard
-          companyId={companyId}
-          onNavigateToBranches={() => handleNavigate('branches', { openAddModal: true })}
-          onNavigateToEmployees={() => handleNavigate('employees', { openAddModal: true })}
-        />
+        <div className="mb-4">
+          <OnboardingSetupCard
+            companyId={companyId}
+            onNavigateToBranches={() => handleNavigate('branches', { openAddModal: true })}
+            onNavigateToEmployees={() => handleNavigate('employees', { openAddModal: true })}
+          />
+        </div>
       )}
 
-      {/* Status Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Vertical Stats Stack (Mobile First) */}
+      <div className="flex flex-col gap-3">
         {loading ? (
-          <AdminSkeleton type="card" count={8} className="h-32" />
+          <AdminSkeleton type="card" count={7} className="h-24" />
         ) : (
           summaryCards.map((card) => {
             const isSelected = selectedCardId === card.id;
@@ -523,8 +525,8 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                 icon={card.icon}
                 iconClassName={`${card.iconBg} ${card.iconColor}`}
                 onClick={() => handleCardClick(card.page, card.title, card.id)}
-                className={`h-full ${isSelected ? 'ring-2 ring-blue-500 border-blue-500 bg-blue-50/10' : ''}`}
-                trend={undefined} // Could add trend logic if available
+                className={`w-full flex-row-reverse text-right items-center transition-all duration-200 active:scale-[0.99] ${isSelected ? 'ring-2 ring-blue-500 border-blue-500 bg-blue-50/10' : ''}`}
+                trend={undefined}
               />
             );
           })
@@ -532,23 +534,20 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
       </div>
 
       {/* Quick Actions */}
-      <div>
+      <div className="mt-6">
         <AdminSectionHeader title={language === 'ar' ? 'إجراءات سريعة' : 'Quick Actions'} />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           {quickActions.map((action) => {
             const Icon = action.icon;
-            // Extract color class to apply to bg/text cleanly if possible, or use inline style for complex gradients
-            // quickActions use full classes like 'bg-blue-500 hover:bg-blue-600'
-            // I'll keep the button style but make it consistent with AdminCard
             return (
               <button
                 key={action.id}
                 onClick={() => handleNavigate(action.page)}
-                className={`${action.color} text-white ${theme.radii.card} p-4 transition-all duration-200 hover:shadow-lg active:scale-[0.98] flex flex-col items-center justify-center gap-3 h-24`}
+                className={`${action.color} text-white ${theme.radii.card} p-3 transition-all duration-200 hover:shadow-lg active:scale-[0.98] flex flex-col items-center justify-center gap-2 h-20`}
                 dir={language === 'ar' ? 'rtl' : 'ltr'}
               >
-                <Icon size={24} />
-                <span className="font-bold text-sm">{action.title}</span>
+                <Icon size={20} />
+                <span className="font-bold text-xs">{action.title}</span>
               </button>
             );
           })}

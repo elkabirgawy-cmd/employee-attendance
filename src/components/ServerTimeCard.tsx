@@ -131,29 +131,21 @@ export default function ServerTimeCard({
     : 'bg-gradient-to-br from-indigo-400 to-purple-500';
 
   return (
-    <div className="bg-white border-0 border-l-4 border-l-blue-600 rounded-[1.5rem] shadow-sm p-8 overflow-hidden mb-0 transition-all duration-300 min-h-[175px] flex flex-col justify-center relative z-10 w-full">
-      <div className={`flex items-center justify-between gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
+    <div className="w-full min-h-[120px] pt-6 pb-2 px-6 flex flex-col justify-center relative z-10">
+      <div className={`flex items-center justify-between gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
         <div className="flex-shrink-0">
-          <div className={`w-16 h-16 rounded-2xl ${iconBgColor} flex items-center justify-center shadow-md transform transition-all duration-500`}>
-            <TimeIcon size={32} className="text-white" />
+          <div className={`w-12 h-12 rounded-xl ${iconBgColor} flex items-center justify-center shadow-sm transform transition-all duration-500`}>
+            <TimeIcon size={24} className="text-white" />
           </div>
         </div>
 
         <div className="flex flex-col items-end" dir={isRTL ? 'rtl' : 'ltr'}>
-          <div className="text-5xl font-black leading-none mb-3 text-slate-800 tracking-tight tabular-nums">
-            {time} <span className="text-xl font-bold text-slate-400">{period}</span>
+          <div className="text-4xl font-black leading-none mb-1 text-slate-800 tracking-tight tabular-nums">
+            {time} <span className="text-lg font-bold text-slate-400">{period}</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-slate-500 font-medium bg-slate-50 px-3 py-1 rounded-full">
-            <Calendar size={14} className="text-blue-600" />
+          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+            <Calendar size={12} className="text-blue-600" />
             <span>{formatDateArabic(serverTime)}</span>
-          </div>
-          <div className="flex flex-col gap-1 mt-2 text-xs">
-            {locationCity && locationCountry && (
-              <div className="flex items-center gap-1.5 text-slate-400">
-                <Clock size={12} />
-                <span>{isRTL ? `${locationCity}, ${locationCountry}` : `${locationCity}, ${locationCountry}`}</span>
-              </div>
-            )}
           </div>
         </div>
       </div>

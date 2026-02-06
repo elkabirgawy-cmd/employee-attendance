@@ -10,8 +10,7 @@ import {
   calculateMonthlyStats as computeMonthlyStats,
   type AttendanceRecord,
   type AttendanceSettings,
-  type EmployeeWorkdaysConfig,
-  type MonthlyStats
+  type EmployeeWorkdaysConfig
 } from '../utils/attendanceCalculations';
 import ServerTimeCard from '../components/ServerTimeCard';
 import { type TimeSync } from '../utils/timezoneDetection';
@@ -74,7 +73,7 @@ export default function EmployeeApp() {
 
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [currentLog, setCurrentLog] = useState<AttendanceLog | null>(null);
-  const [timeSync, setTimeSync] = useState<TimeSync | null>(null);
+  const [, setTimeSync] = useState<TimeSync | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState('');
@@ -88,7 +87,7 @@ export default function EmployeeApp() {
   const [locationCountry, setLocationCountry] = useState<string | null>(() => {
     return localStorage.getItem('employee_location_country');
   });
-  const [timezoneResolutionError, setTimezoneResolutionError] = useState(false);
+  const [, setTimezoneResolutionError] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showRequestsSheet, setShowRequestsSheet] = useState(false);
@@ -112,7 +111,6 @@ export default function EmployeeApp() {
   const [branchDataSource, setBranchDataSource] = useState<string>('loadBranchLocation');
   const [currentDistance, setCurrentDistance] = useState<number | null>(null);
   const [currentInRange, setCurrentInRange] = useState<boolean | null>(null);
-  const [isLocationValid, setIsLocationValid] = useState(true);
   const [locationHealth, setLocationHealth] = useState<{
     permission: 'granted' | 'denied' | 'prompt' | 'unknown';
     lastFixAtMs: number | null;
@@ -174,10 +172,9 @@ export default function EmployeeApp() {
   const [preCheckInElapsedSec, setPreCheckInElapsedSec] = useState(0);
   const [preCheckInError, setPreCheckInError] = useState('');
   const [locationState, setLocationState] = useState<'LOCATING' | 'OK' | 'STALE' | 'ERROR'>('LOCATING');
-  const [locationError, setLocationError] = useState<string>('');
+  const [, setLocationError] = useState<string>('');
   const [lastLocationUpdateAt, setLastLocationUpdateAt] = useState<number>(0);
-  const [locationAttemptCount, setLocationAttemptCount] = useState(0);
-  const [locationAgeSeconds, setLocationAgeSeconds] = useState<number>(0);
+  const [, setLocationAgeSeconds] = useState<number>(0);
   const [locatingMessageIndex, setLocatingMessageIndex] = useState(0);
   const watchIdRef = useRef<number | null>(null);
   const lastUpdateTimeRef = useRef<number>(0);
@@ -204,7 +201,6 @@ export default function EmployeeApp() {
 
   const FRESH_WINDOW_SECONDS = 20;
   const UPDATE_INTERVAL_SECONDS = 12;
-  const ATTEMPT_TIMEOUT_SECONDS = 8;
   const LOCATING_PULSE_SECONDS = 3;
 
   const LOCATING_MESSAGES = [

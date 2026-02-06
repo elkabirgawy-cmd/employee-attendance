@@ -464,7 +464,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
     >
       {/* Custom Compact Header */}
       {/* Custom Compact Header Area */}
-      <div className="mb-6 space-y-4">
+      <div className="mb-4 space-y-3">
         {/* 1. Time Card FIRST */}
         <ServerTimeCard />
 
@@ -512,7 +512,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
       )}
 
       {/* Vertical Stats Stack (Mobile First) */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
         {loading ? (
           <AdminSkeleton type="card" count={7} className="h-24" />
         ) : (
@@ -527,7 +527,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                 icon={card.icon}
                 iconClassName={`${card.iconBg} ${card.iconColor}`}
                 onClick={() => handleCardClick(card.page, card.title, card.id)}
-                className={`w-full flex-row-reverse text-right items-center transition-all duration-200 active:scale-[0.99] ${isSelected ? 'ring-2 ring-blue-500 border-blue-500 bg-blue-50/10' : ''}`}
+                className={`w-full transition-all duration-200 active:scale-[0.99] ${isSelected ? 'ring-2 ring-blue-500 border-blue-500 bg-blue-50/10' : ''}`}
                 trend={undefined}
               />
             );

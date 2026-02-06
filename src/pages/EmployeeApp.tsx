@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+﻿import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import {
-  MapPin, LogOut, Clock, User, Sun, Moon,
+  MapPin, Clock, User, Sun, Moon,
   ArrowRight, XCircle, Loader2, ChevronRight, ChevronDown,
   Fingerprint, ArrowUpCircle, AlertCircle, CheckCircle2, Calculator
 } from 'lucide-react';
@@ -204,22 +204,22 @@ export default function EmployeeApp() {
   const LOCATING_PULSE_SECONDS = 3;
 
   const LOCATING_MESSAGES = [
-    'جاري تحديد الموقع... الرجاء الانتظار',
-    'جاري البحث عن إحداثيات موقعك...',
-    'يتم الاتصال بخدمات الموقع...',
-    'يرجى التحقق من تفعيل GPS...',
+    'Ø¬Ø§Ø±ÙŠ ØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ù…ÙˆÙ‚Ø¹... Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ù„Ø§Ù†ØªØ¸Ø§Ø±',
+    'Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ø¥Ø­Ø¯Ø§Ø«ÙŠØ§Øª Ù…ÙˆÙ‚Ø¹Ùƒ...',
+    'ÙŠØªÙ… Ø§Ù„Ø§ØªØµØ§Ù„ Ø¨Ø®Ø¯Ù…Ø§Øª Ø§Ù„Ù…ÙˆÙ‚Ø¹...',
+    'ÙŠØ±Ø¬Ù‰ Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ØªÙØ¹ÙŠÙ„ GPS...',
   ];
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
-    const R = 6371e3;
-    const φ1 = lat1 * Math.PI / 180;
-    const φ2 = lat2 * Math.PI / 180;
-    const Δφ = (lat2 - lat1) * Math.PI / 180;
-    const Δλ = (lon2 - lon1) * Math.PI / 180;
+    const R = 6371e3; // metres
+    const phi1 = lat1 * Math.PI / 180;
+    const phi2 = lat2 * Math.PI / 180;
+    const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+    const deltaLambda = (lon2 - lon1) * Math.PI / 180;
 
-    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) *
-      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+      Math.cos(phi1) * Math.cos(phi2) *
+      Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return R * c;
@@ -445,14 +445,14 @@ export default function EmployeeApp() {
         }
 
         if (error.code === 1) {
-          setLocationError('جاري تحديد الموقع...');
+          setLocationError('Ø¬Ø§Ø±ÙŠ ØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ù…ÙˆÙ‚Ø¹...');
           setLocationHealth(prev => ({
             ...prev,
             permission: 'denied',
             isDisabled: true
           }));
         } else if (error.code === 2 || error.code === 3) {
-          setLocationError('جاري البحث عن إحداثيات موقعك...');
+          setLocationError('Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ø¥Ø­Ø¯Ø§Ø«ÙŠØ§Øª Ù…ÙˆÙ‚Ø¹Ùƒ...');
         }
       },
       {
@@ -599,7 +599,7 @@ export default function EmployeeApp() {
     });
 
     if (DEBUG_LOCATION_RECOVERY) {
-      console.log('[handleLocationSuccess] ✅ REAL COORDS RECEIVED:', {
+      console.log('[handleLocationSuccess] âœ… REAL COORDS RECEIVED:', {
         lat: newLat,
         lng: newLng,
         accuracy: newAccuracy,
@@ -640,7 +640,7 @@ export default function EmployeeApp() {
     updateLocationHealth(newLocation);
 
     if (DEBUG_LOCATION_RECOVERY) {
-      console.log('[handleLocationSuccess] ✅ State: LOCATION_READY | lastFixTimestamp updated');
+      console.log('[handleLocationSuccess] âœ… State: LOCATION_READY | lastFixTimestamp updated');
     }
   };
 
@@ -676,7 +676,7 @@ export default function EmployeeApp() {
           }
 
           setLocationState('LOCATING');
-          setLocationError('يرجى السماح بالوصول إلى الموقع');
+          setLocationError('ÙŠØ±Ø¬Ù‰ Ø§Ù„Ø³Ù…Ø§Ø­ Ø¨Ø§Ù„ÙˆØµÙˆÙ„ Ø¥Ù„Ù‰ Ø§Ù„Ù…ÙˆÙ‚Ø¹');
           setLocationHealth(prev => ({
             ...prev,
             permission: 'denied',
@@ -707,127 +707,6 @@ export default function EmployeeApp() {
     }
   };
 
-  const startLocationRequests = async () => {
-    if (DEBUG_LOCATION_RECOVERY) {
-      console.log('[startLocationRequests] HARD RESET - clearing all watchers and timers');
-    }
-
-    stopLocationWatcher();
-    if (locationAttemptTimerRef.current) {
-      clearTimeout(locationAttemptTimerRef.current);
-      locationAttemptTimerRef.current = null;
-    }
-
-    const attemptGetCurrentPosition = (highAccuracy: boolean, timeout: number): Promise<GeolocationPosition> => {
-      return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-          resolve,
-          reject,
-          {
-            enableHighAccuracy: highAccuracy,
-            timeout: timeout,
-            maximumAge: 0
-          }
-        );
-      });
-    };
-
-    try {
-      let position: GeolocationPosition;
-
-      if (DEBUG_LOCATION_RECOVERY) {
-        console.log('[startLocationRequests] Attempt 1: lowAccuracy, 10s timeout');
-      }
-
-      try {
-        setLocationError('يتم الاتصال بخدمات الموقع...');
-        position = await attemptGetCurrentPosition(false, 10000);
-
-        if (DEBUG_LOCATION_RECOVERY) {
-          console.log('[startLocationRequests] Attempt 1 SUCCESS:', {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            accuracy: position.coords.accuracy
-          });
-        }
-      } catch (firstError: any) {
-        if (DEBUG_LOCATION_RECOVERY) {
-          console.log('[startLocationRequests] Attempt 1 failed:', firstError.code, firstError.message);
-        }
-
-        if (firstError.code === 1) {
-          if (DEBUG_LOCATION_RECOVERY) {
-            console.log('[startLocationRequests] PERMISSION_DENIED - starting recovery loop');
-          }
-          setLocationState('LOCATING');
-          setLocationError('يرجى السماح بالوصول إلى الموقع');
-          setLocationHealth(prev => ({
-            ...prev,
-            permission: 'denied',
-            isDisabled: true
-          }));
-          loginLocationWasOffRef.current = true;
-          startLocationPollingWhenOff();
-          return;
-        }
-
-        if (DEBUG_LOCATION_RECOVERY) {
-          console.log('[startLocationRequests] Attempt 2: highAccuracy, 12s timeout');
-        }
-
-        try {
-          setLocationError('جاري البحث عن إحداثيات موقعك...');
-          position = await attemptGetCurrentPosition(true, 12000);
-
-          if (DEBUG_LOCATION_RECOVERY) {
-            console.log('[startLocationRequests] Attempt 2 SUCCESS:', {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-              accuracy: position.coords.accuracy
-            });
-          }
-        } catch (secondError: any) {
-          if (DEBUG_LOCATION_RECOVERY) {
-            console.log('[startLocationRequests] Attempt 2 failed:', secondError.code, secondError.message);
-          }
-
-          if (secondError.code === 1) {
-            if (DEBUG_LOCATION_RECOVERY) {
-              console.log('[startLocationRequests] PERMISSION_DENIED - starting recovery loop');
-            }
-            setLocationState('LOCATING');
-            setLocationError('يرجى السماح بالوصول إلى الموقع');
-            setLocationHealth(prev => ({
-              ...prev,
-              permission: 'denied',
-              isDisabled: true
-            }));
-            loginLocationWasOffRef.current = true;
-            startLocationPollingWhenOff();
-            return;
-          }
-          throw secondError;
-        }
-      }
-
-      if (DEBUG_LOCATION_RECOVERY) {
-        console.log('[startLocationRequests] Got position! Processing and updating lastFixTimestamp...');
-      }
-
-      await handleLocationSuccess(position);
-
-      if (DEBUG_LOCATION_RECOVERY) {
-        console.log('[startLocationRequests] Starting fresh continuous watcher...');
-      }
-
-      startLocationWatcher();
-
-    } catch (error: any) {
-      console.error('[startLocationRequests] Failed:', error);
-      setLocationState('LOCATING');
-      setLocationError('تعذر تحديد الموقع، جاري إعادة المحاولة...');
-    }
-  };
 
   const ensureLocationFlow = async () => {
     if (DEBUG_LOCATION_RECOVERY) {
@@ -835,7 +714,7 @@ export default function EmployeeApp() {
     }
 
     setLocationState('LOCATING');
-    setLocationError('جاري تحديد الموقع...');
+    setLocationError('Ø¬Ø§Ø±ÙŠ ØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ù…ÙˆÙ‚Ø¹...');
 
     stopLocationPollingWhenOff();
     stopLocationWatcher();
@@ -855,50 +734,7 @@ export default function EmployeeApp() {
     }
   };
 
-  const startLocationPollingWhenOff = () => {
-    stopLocationPollingWhenOff();
 
-    if (DEBUG_LOCATION_RECOVERY) {
-      console.log('[LocationRecoveryLoop] Started - checking every 1500ms for Location ON');
-    }
-
-    locationStatusPollingRef.current = window.setInterval(async () => {
-      const { enabled, permission } = await recheckLocationState();
-
-      if (DEBUG_LOCATION_RECOVERY) {
-        console.log('[LocationRecoveryLoop] Check:', { enabled, permission, loginWasOff: loginLocationWasOffRef.current });
-      }
-
-      if (enabled && permission === 'granted') {
-        if (DEBUG_LOCATION_RECOVERY) {
-          console.log('[LocationRecoveryLoop] Location is ON! Detected OFF→ON transition');
-        }
-
-        stopLocationPollingWhenOff();
-
-        if (loginLocationWasOffRef.current) {
-          if (DEBUG_LOCATION_RECOVERY) {
-            console.log('[LocationRecoveryLoop] First OFF→ON after login - performing silent session refresh');
-          }
-
-          await silentSessionRefresh();
-          loginLocationWasOffRef.current = false;
-        }
-
-        if (DEBUG_LOCATION_RECOVERY) {
-          console.log('[LocationRecoveryLoop] Stopping all watchers and restarting location engine...');
-        }
-
-        stopLocationWatcher();
-        if (locationAttemptTimerRef.current) {
-          clearTimeout(locationAttemptTimerRef.current);
-          locationAttemptTimerRef.current = null;
-        }
-
-        await ensureLocationFlow();
-      }
-    }, 1500);
-  };
 
   useEffect(() => {
     validateSession();
@@ -937,7 +773,7 @@ export default function EmployeeApp() {
           event: 'UPDATE',
           schema: 'public',
           table: 'branches',
-          filter: `id=eq.${employee.branch_id}&company_id=eq.${employee.company_id}` // ✅ Multi-tenant filter
+          filter: `id=eq.${employee.branch_id}&company_id=eq.${employee.company_id}` // âœ… Multi-tenant filter
         },
         (payload) => {
           console.log('[REALTIME] Branch updated, refreshing geofence...', payload.new);
@@ -953,7 +789,7 @@ export default function EmployeeApp() {
               updated_at: string
             };
 
-            // ✅ Verify company_id matches (extra safety check)
+            // âœ… Verify company_id matches (extra safety check)
             if (updatedBranch.company_id !== employee.company_id) {
               console.error('[REALTIME] Branch belongs to different company, ignoring update');
               return;
@@ -979,7 +815,7 @@ export default function EmployeeApp() {
               updated_at: updatedBranch.updated_at
             });
 
-            console.log('[REALTIME] ✅ Branch location updated:', {
+            console.log('[REALTIME] âœ… Branch location updated:', {
               id: updatedBranch.id,
               name: updatedBranch.name,
               lat: updatedBranch.latitude,
@@ -1002,9 +838,9 @@ export default function EmployeeApp() {
       console.log('[REALTIME] Cleaning up branch location subscription');
       supabase.removeChannel(channel);
     };
-  }, [employee?.branch_id, employee?.company_id]); // ✅ Re-subscribe on company_id change
+  }, [employee?.branch_id, employee?.company_id]); // âœ… Re-subscribe on company_id change
 
-  // 🔄 Window focus listener: Refetch branch data on window focus (no caching)
+  // ðŸ”„ Window focus listener: Refetch branch data on window focus (no caching)
   useEffect(() => {
     if (!employee?.branch_id || !employee?.company_id) return;
 
@@ -1170,12 +1006,12 @@ export default function EmployeeApp() {
     const inRange = !isOutside;
     setIsConfirmedOutside(isOutside);
 
-    // 📊 Store for debug panel
+    // ðŸ“Š Store for debug panel
     setCurrentDistance(distance);
     setCurrentInRange(inRange);
 
-    // 🔍 DEBUG: GPS distance calculation
-    console.log('🔍 [GPS_VALIDATION]', {
+    // ðŸ” DEBUG: GPS distance calculation
+    console.log('ðŸ” [GPS_VALIDATION]', {
       employee_id: employee?.id,
       branch_id: employee?.branch_id,
       branch_lat: branchLocation.lat,
@@ -1185,7 +1021,7 @@ export default function EmployeeApp() {
       employee_lng: location.lng,
       distance: Math.round(distance),
       inRange,
-      status: inRange ? 'داخل الفرع' : 'خارج الفرع'
+      status: inRange ? 'Ø¯Ø§Ø®Ù„ Ø§Ù„ÙØ±Ø¹' : 'Ø®Ø§Ø±Ø¬ Ø§Ù„ÙØ±Ø¹'
     });
 
     if (DEBUG_LOCATION_RECOVERY) {
@@ -1193,7 +1029,7 @@ export default function EmployeeApp() {
         distance: Math.round(distance),
         radius: branchLocation.radius,
         isOutside,
-        status: isOutside ? 'خارج الفرع' : 'داخل الفرع'
+        status: isOutside ? 'Ø®Ø§Ø±Ø¬ Ø§Ù„ÙØ±Ø¹' : 'Ø¯Ø§Ø®Ù„ Ø§Ù„ÙØ±Ø¹'
       });
     }
   }, [location, branchLocation, locationState]);
@@ -1396,13 +1232,13 @@ export default function EmployeeApp() {
         let fixedTimezone = 'Asia/Riyadh';
 
         if (settingsData) {
-          settingsData.forEach((setting: any) => {
+          for (const setting of settingsData) {
             if (setting.key === 'timezone_mode') {
               timezoneMode = setting.value as 'auto_gps' | 'fixed';
             } else if (setting.key === 'fixed_timezone') {
               fixedTimezone = setting.value as string;
             }
-          });
+          }
         }
 
         if (timezoneMode === 'fixed') {
@@ -1621,7 +1457,7 @@ export default function EmployeeApp() {
       console.log('[SESSION] ========== Session validation completed ==========');
     } catch (err) {
       console.error('[SESSION] Validation error:', err);
-      setError('فشل تحميل البيانات - يرجى المحاولة مرة أخرى');
+      setError('ÙØ´Ù„ ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª - ÙŠØ±Ø¬Ù‰ Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù…Ø±Ø© Ø£Ø®Ø±Ù‰');
     } finally {
       setLoading(false);
     }
@@ -1632,25 +1468,25 @@ export default function EmployeeApp() {
     setBranchDataSource(functionName);
 
     try {
-      // ❌ HARD RULE: Branch ID must be provided
+      // âŒ HARD RULE: Branch ID must be provided
       if (!branchId) {
         const errorMsg = 'DATA INTEGRITY ERROR: No branch_id provided';
         console.error(`[${functionName}]`, errorMsg);
-        setError('لم يتم تعيين فرع للموظف');
+        setError('Ù„Ù… ÙŠØªÙ… ØªØ¹ÙŠÙŠÙ† ÙØ±Ø¹ Ù„Ù„Ù…ÙˆØ¸Ù');
         throw new Error(errorMsg);
       }
 
-      // ❌ HARD RULE: Company ID must be provided
+      // âŒ HARD RULE: Company ID must be provided
       if (!companyId) {
         const errorMsg = 'DATA INTEGRITY ERROR: No company_id provided';
         console.error(`[${functionName}]`, errorMsg);
-        setError('خطأ في معرف الشركة');
+        setError('Ø®Ø·Ø£ ÙÙŠ Ù…Ø¹Ø±Ù Ø§Ù„Ø´Ø±ÙƒØ©');
         throw new Error(errorMsg);
       }
 
-      console.log(`[${functionName}] 🔄 HARD FETCH (NO CACHE):`, { branchId, companyId });
+      console.log(`[${functionName}] ðŸ”„ HARD FETCH (NO CACHE):`, { branchId, companyId });
 
-      // 🎯 HARD-CODED NO-CACHE FETCH: Always fetch fresh data by ID
+      // ðŸŽ¯ HARD-CODED NO-CACHE FETCH: Always fetch fresh data by ID
       // SELECT id, company_id, name, latitude, longitude, geofence_radius, updated_at
       // FROM public.branches
       // WHERE id = branchId AND company_id = companyId AND is_active = true
@@ -1667,36 +1503,36 @@ export default function EmployeeApp() {
       const fetchTime = new Date();
       setBranchFetchTime(fetchTime);
 
-      // ❌ ASSERT: Query must not fail
+      // âŒ ASSERT: Query must not fail
       if (error) {
         const errorMsg = `RLS/QUERY ERROR: ${error.message}`;
         console.error(`[${functionName}]`, errorMsg, error);
-        setError('فشل تحميل بيانات الفرع - خطأ في الاستعلام');
+        setError('ÙØ´Ù„ ØªØ­Ù…ÙŠÙ„ Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„ÙØ±Ø¹ - Ø®Ø·Ø£ ÙÙŠ Ø§Ù„Ø§Ø³ØªØ¹Ù„Ø§Ù…');
         throw new Error(errorMsg);
       }
 
-      // ❌ ASSERT: Branch must exist
+      // âŒ ASSERT: Branch must exist
       if (!data) {
         const errorMsg = 'RLS/BRANCH NOT FOUND: Branch does not exist or RLS blocked access';
         console.error(`[${functionName}]`, errorMsg, { branchId, companyId });
-        setError('الفرع غير موجود أو غير نشط');
+        setError('Ø§Ù„ÙØ±Ø¹ ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯ Ø£Ùˆ ØºÙŠØ± Ù†Ø´Ø·');
         throw new Error(errorMsg);
       }
 
-      // ❌ ASSERT: Company ID must match (DATA INTEGRITY CHECK)
+      // âŒ ASSERT: Company ID must match (DATA INTEGRITY CHECK)
       if (data.company_id !== companyId) {
         const errorMsg = 'DATA INTEGRITY ERROR: Branch company_id does not match employee company_id';
-        console.error(`[${functionName}] 🚨`, errorMsg, {
+        console.error(`[${functionName}] ðŸš¨`, errorMsg, {
           branchCompanyId: data.company_id,
           employeeCompanyId: companyId,
           branchId,
           branchName: data.name
         });
-        setError('خطأ في تكامل البيانات - الفرع ينتمي لشركة أخرى');
+        setError('Ø®Ø·Ø£ ÙÙŠ ØªÙƒØ§Ù…Ù„ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª - Ø§Ù„ÙØ±Ø¹ ÙŠÙ†ØªÙ…ÙŠ Ù„Ø´Ø±ÙƒØ© Ø£Ø®Ø±Ù‰');
         throw new Error(errorMsg);
       }
 
-      // ✅ All assertions passed - store data
+      // âœ… All assertions passed - store data
       const hasChanged = branchUpdatedAt !== data.updated_at;
 
       setBranchLocation({
@@ -1717,8 +1553,8 @@ export default function EmployeeApp() {
         updated_at: data.updated_at
       });
 
-      // 🔍 DEBUG: Branch fetch results
-      console.log('🔍 [BRANCH_REFRESH]', {
+      // ðŸ” DEBUG: Branch fetch results
+      console.log('ðŸ” [BRANCH_REFRESH]', {
         function: functionName,
         fetch_time: fetchTime.toISOString(),
         employee_id: employee?.id,
@@ -1738,7 +1574,7 @@ export default function EmployeeApp() {
         }
       });
 
-      console.log(`[${functionName}] ✅ Loaded successfully:`, {
+      console.log(`[${functionName}] âœ… Loaded successfully:`, {
         branchId: data.id,
         branchName: data.name,
         companyId: data.company_id,
@@ -1749,13 +1585,13 @@ export default function EmployeeApp() {
 
       // Note: GPS re-evaluation happens automatically via useEffect when branchLocation changes
       if (hasChanged) {
-        console.log(`[${functionName}] 🔄 Data changed, GPS distance will be recalculated automatically`);
+        console.log(`[${functionName}] ðŸ”„ Data changed, GPS distance will be recalculated automatically`);
       }
 
       return data; // Return for chaining if needed
     } catch (err) {
-      console.error(`[${functionName}] ❌ Exception:`, err);
-      setError('فشل تحميل بيانات الفرع');
+      console.error(`[${functionName}] âŒ Exception:`, err);
+      setError('ÙØ´Ù„ ØªØ­Ù…ÙŠÙ„ Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„ÙØ±Ø¹');
       throw err; // Re-throw to allow caller to handle
     }
   };
@@ -1781,7 +1617,7 @@ export default function EmployeeApp() {
 
       const { data, error } = await supabase
         .from('attendance_logs')
-        .select('id, check_in_time, check_out_time, company_id, employee_id')
+        .select('id, check_in_time, check_out_time, company_id, employee_id, late_minutes, early_leave_minutes')
         .eq('employee_id', employeeId)
         .eq('company_id', companyId)
         .gte('check_in_time', `${today}T00:00:00`)
@@ -1827,8 +1663,13 @@ export default function EmployeeApp() {
           companyId: data.company_id,
           employeeId: data.employee_id
         });
-        setCurrentLog(data);
-        currentLogRef.current = data;
+        const fullLog: AttendanceLog = {
+          ...data,
+          late_minutes: data.late_minutes || 0,
+          early_leave_minutes: data.early_leave_minutes || 0
+        };
+        setCurrentLog(fullLog);
+        currentLogRef.current = fullLog;
 
         const { data: pendingData, error: pendingError } = await supabase
           .from('auto_checkout_pending')
@@ -1984,21 +1825,7 @@ export default function EmployeeApp() {
     }
   };
 
-  const hasLocationWarning = (): { hasWarning: boolean; reason: 'LOCATION_DISABLED' | 'OUT_OF_BRANCH' | null } => {
-    if (locationHealth.isDisabled || locationHealth.isStale) {
-      return { hasWarning: true, reason: 'LOCATION_DISABLED' };
-    }
 
-    if (!location && locationState !== 'LOCATING') {
-      return { hasWarning: true, reason: 'LOCATION_DISABLED' };
-    }
-
-    if (isConfirmedOutside && location) {
-      return { hasWarning: true, reason: 'OUT_OF_BRANCH' };
-    }
-
-    return { hasWarning: false, reason: null };
-  };
 
   const syncAutoCheckoutState = async (isPolling = false) => {
     if (!employee || !currentLog) {
@@ -2129,10 +1956,8 @@ export default function EmployeeApp() {
   const handleCheckOutRef = useRef<((options?: { source?: 'manual' | 'auto' }) => Promise<void>) | null>(null);
   const autoCheckoutTimerRef = useRef<number | null>(null);
   const autoCheckoutRef = useRef(autoCheckout);
-  const autoCheckoutPendingIdRef = useRef<string | null>(null);
   const locationHeartbeatIntervalRef = useRef<number | null>(null);
-  const retryCheckoutTimerRef = useRef<number | null>(null);
-  const retryCheckoutAttemptsRef = useRef<number>(0);
+
 
   const startWatchingLocation = async () => {
     ensureLocationFlow();
@@ -2180,7 +2005,7 @@ export default function EmployeeApp() {
 
       const attemptGetLocation = () => {
         attemptCount++;
-        const attemptStartTime = Date.now();
+        attemptCount++;
 
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -2210,7 +2035,7 @@ export default function EmployeeApp() {
               }
             }
           },
-          (error) => {
+          (_error) => {
             const elapsedTotal = Date.now() - startTime;
             if (elapsedTotal >= MAX_TIMEOUT_MS) {
               cleanupTimers();
@@ -2235,7 +2060,7 @@ export default function EmployeeApp() {
 
   const handleCheckIn = async () => {
     if (!employee) {
-      setError('طلب غير صالح');
+      setError('Ø·Ù„Ø¨ ØºÙŠØ± ØµØ§Ù„Ø­');
       return;
     }
 
@@ -2263,7 +2088,7 @@ export default function EmployeeApp() {
         );
 
         if (distance > branchLocation.radius) {
-          setPreCheckInError('أنت خارج نطاق موقع الفرع');
+          setPreCheckInError('Ø£Ù†Øª Ø®Ø§Ø±Ø¬ Ù†Ø·Ø§Ù‚ Ù…ÙˆÙ‚Ø¹ Ø§Ù„ÙØ±Ø¹');
           return;
         }
       }
@@ -2294,7 +2119,7 @@ export default function EmployeeApp() {
       const result = await response.json();
 
       if (!response.ok || !result.ok) {
-        throw new Error(result.message_ar || 'فشل تسجيل الحضور');
+        throw new Error(result.message_ar || 'ÙØ´Ù„ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø­Ø¶ÙˆØ±');
       }
 
       console.log('[CHECKIN_SUCCESS] Check-in completed:', {
@@ -2304,8 +2129,14 @@ export default function EmployeeApp() {
         employeeId: result.data.employee_id
       });
 
-      setCurrentLog(result.data);
-      currentLogRef.current = result.data;
+      const fullLog: AttendanceLog = {
+        ...result.data,
+        late_minutes: result.data.late_minutes || 0,
+        early_leave_minutes: result.data.early_leave_minutes || 0
+      };
+
+      setCurrentLog(fullLog);
+      currentLogRef.current = fullLog;
 
       console.log('[CHECKIN_SUCCESS] State updated:', {
         status: 'CHECKED_IN',
@@ -2325,7 +2156,7 @@ export default function EmployeeApp() {
       if (err.message === 'TIMEOUT') {
         setPreCheckInError('TIMEOUT');
       } else {
-        setError(err.message || 'فشل تسجيل الحضور');
+        setError(err.message || 'ÙØ´Ù„ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø­Ø¶ÙˆØ±');
       }
       console.error('Check-in error:', err);
     } finally {
@@ -2341,7 +2172,7 @@ export default function EmployeeApp() {
     console.log('[CHECKOUT_REQUEST]', { source });
 
     if (!employee || !currentLog) {
-      setError('طلب غير صالح');
+      setError('Ø·Ù„Ø¨ ØºÙŠØ± ØµØ§Ù„Ø­');
       return;
     }
 
@@ -2349,7 +2180,7 @@ export default function EmployeeApp() {
     // AUTO checkout: NEVER blocked - executes regardless of location
     if (source === 'manual' && isConfirmedOutside) {
       console.log('[CHECKOUT_BLOCKED]', { reason: 'outside_branch_manual' });
-      setError('أنت خارج نطاق موقع الفرع');
+      setError('Ø£Ù†Øª Ø®Ø§Ø±Ø¬ Ù†Ø·Ø§Ù‚ Ù…ÙˆÙ‚Ø¹ Ø§Ù„ÙØ±Ø¹');
       return;
     }
 
@@ -2386,7 +2217,7 @@ export default function EmployeeApp() {
       const result = await response.json();
 
       if (!response.ok || !result.ok) {
-        throw new Error(result.message_ar || 'فشل تسجيل الانصراف');
+        throw new Error(result.message_ar || 'ÙØ´Ù„ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø§Ù†ØµØ±Ø§Ù');
       }
 
       if (source === 'auto' && currentLog) {
@@ -2415,7 +2246,7 @@ export default function EmployeeApp() {
         setTimeout(() => setShowAutoCheckoutToast(false), 5000);
       }
     } catch (err: any) {
-      setError(err.message || 'فشل تسجيل الانصراف');
+      setError(err.message || 'ÙØ´Ù„ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø§Ù†ØµØ±Ø§Ù');
       console.error('[CHECKOUT_ERROR]', { source, error: err.message || err });
     } finally {
       setActionLoading(false);
@@ -2603,8 +2434,7 @@ export default function EmployeeApp() {
               executionState: 'CANCELLED'
             });
           }
-        })
-        .catch((err) => {
+        }, (err: any) => {
           console.error('[HEARTBEAT_EXCEPTION]', err);
         });
     }, heartbeatInterval);
@@ -2655,7 +2485,7 @@ export default function EmployeeApp() {
   return (
     <div className="min-h-screen overflow-hidden" style={{ height: '874px', maxHeight: '874px', background: 'linear-gradient(145deg, #F8F9FC 0%, #F0F2F8 50%, #EAECF4 100%)' }}>
       <div className="max-w-md mx-auto h-full flex flex-col px-4" style={{ width: '402px', maxWidth: '402px' }}>
-        {/* Top Bar - RTL: Profile (left) | الطلبات (center) | رجوع (right) */}
+        {/* Top Bar - RTL: Profile (left) | Ø§Ù„Ø·Ù„Ø¨Ø§Øª (center) | Ø±Ø¬ÙˆØ¹ (right) */}
         <div
           className="flex items-center justify-between pt-4 pb-3"
           dir="rtl"
@@ -2664,7 +2494,7 @@ export default function EmployeeApp() {
             zIndex: 10
           }}
         >
-          {/* Right (RTL): رجوع button */}
+          {/* Right (RTL): Ø±Ø¬ÙˆØ¹ button */}
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 backdrop-blur-sm transition-all hover:scale-[1.02] flex-shrink-0"
@@ -2678,11 +2508,11 @@ export default function EmployeeApp() {
               borderRadius: '24px'
             }}
           >
-            <span className="text-sm font-semibold" style={{ color: '#1C2B4A' }}>رجوع</span>
+            <span className="text-sm font-semibold" style={{ color: '#1C2B4A' }}>Ø±Ø¬ÙˆØ¹</span>
             <ArrowRight className="w-4 h-4" style={{ color: '#6D7A99' }} strokeWidth={1.5} />
           </button>
 
-          {/* Center: الطلبات button (3x width of رجوع) */}
+          {/* Center: Ø§Ù„Ø·Ù„Ø¨Ø§Øª button (3x width of Ø±Ø¬ÙˆØ¹) */}
           <div className="relative" style={{ width: '210px' }}>
             <button
               onClick={() => setShowRequestsSheet(true)}
@@ -2694,7 +2524,7 @@ export default function EmployeeApp() {
                 borderRadius: '24px'
               }}
             >
-              <span className="text-sm font-bold text-white">الطلبات</span>
+              <span className="text-sm font-bold text-white">Ø§Ù„Ø·Ù„Ø¨Ø§Øª</span>
               <ChevronDown
                 className={`w-4 h-4 text-white requests-arrow ${showRequestsSheet ? 'rotate-180' : 'rotate-0'}`}
                 strokeWidth={2}
@@ -2773,7 +2603,7 @@ export default function EmployeeApp() {
                 </div>
                 <div className="text-right" dir="rtl">
                   <h3 className="text-base font-bold" style={{ color: '#1C2B4A' }}>{employee?.full_name}</h3>
-                  <p className="text-xs" style={{ color: '#6D7A99' }}>مهندس برمجيات · {employee?.employee_code}</p>
+                  <p className="text-xs" style={{ color: '#6D7A99' }}>Ù…Ù‡Ù†Ø¯Ø³ Ø¨Ø±Ù…Ø¬ÙŠØ§Øª Â· {employee?.employee_code}</p>
                 </div>
               </div>
 
@@ -2785,7 +2615,7 @@ export default function EmployeeApp() {
               >
                 <ShiftIcon className="w-3.5 h-3.5" style={{ color: theme.shiftColor }} strokeWidth={1.5} />
                 <span className="text-xs font-medium" style={{ color: theme.shiftColor }}>
-                  {theme.type === 'morning' ? 'وردية صباحية' : 'وردية مسائية'}
+                  {theme.type === 'morning' ? 'ÙˆØ±Ø¯ÙŠØ© ØµØ¨Ø§Ø­ÙŠØ©' : 'ÙˆØ±Ø¯ÙŠØ© Ù…Ø³Ø§Ø¦ÙŠØ©'}
                 </span>
               </div>
             </div>
@@ -2813,7 +2643,7 @@ export default function EmployeeApp() {
                     <ArrowUpCircle className="w-4 h-4 text-green-600" strokeWidth={1.5} />
                   </div>
                   <div className="text-right" dir="rtl">
-                    <p className="text-xs" style={{ color: '#6D7A99' }}>الحضور</p>
+                    <p className="text-xs" style={{ color: '#6D7A99' }}>Ø§Ù„Ø­Ø¶ÙˆØ±</p>
                     <p className="text-sm font-semibold" style={{ color: '#1C2B4A' }}>
                       {new Date(currentLog.check_in_time).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}
                     </p>
@@ -2828,8 +2658,8 @@ export default function EmployeeApp() {
                     <Clock className="w-4 h-4" style={{ color: '#98A4C0' }} strokeWidth={1.5} />
                   </div>
                   <div className="text-right" dir="rtl">
-                    <p className="text-xs" style={{ color: '#6D7A99' }}>الانصراف</p>
-                    <p className="text-sm font-semibold" style={{ color: '#98A4C0' }}>لم يتم بعد</p>
+                    <p className="text-xs" style={{ color: '#6D7A99' }}>Ø§Ù„Ø§Ù†ØµØ±Ø§Ù</p>
+                    <p className="text-sm font-semibold" style={{ color: '#98A4C0' }}>Ù„Ù… ÙŠØªÙ… Ø¨Ø¹Ø¯</p>
                   </div>
                 </div>
               </div>
@@ -2837,7 +2667,7 @@ export default function EmployeeApp() {
               {/* Timer Section */}
               <div className="flex items-center justify-between py-2">
                 <div className="text-right" dir="rtl">
-                  <p className="text-xs mb-1" style={{ color: '#6D7A99' }}>الوقت المنقضي</p>
+                  <p className="text-xs mb-1" style={{ color: '#6D7A99' }}>Ø§Ù„ÙˆÙ‚Øª Ø§Ù„Ù…Ù†Ù‚Ø¶ÙŠ</p>
                   <div className="text-2xl font-bold font-mono" style={{ color: '#1C2B4A' }} dir="ltr">
                     {elapsed.hours.toString().padStart(2, '0')}:
                     {elapsed.minutes.toString().padStart(2, '0')}:
@@ -2861,11 +2691,11 @@ export default function EmployeeApp() {
                 </div>
 
                 <div className="flex items-center justify-between text-xs" style={{ color: '#98A4C0' }}>
-                  <span>08:00 ص</span>
+                  <span>08:00 Øµ</span>
                   <span className="text-center" dir="rtl">
-                    {elapsed.hours} ساعة و {elapsed.minutes} دقيقة من 8 ساعات
+                    {elapsed.hours} Ø³Ø§Ø¹Ø© Ùˆ {elapsed.minutes} Ø¯Ù‚ÙŠÙ‚Ø© Ù…Ù† 8 Ø³Ø§Ø¹Ø§Øª
                   </span>
-                  <span>04:00 م</span>
+                  <span>04:00 Ù…</span>
                 </div>
               </div>
             </div>
@@ -2884,8 +2714,8 @@ export default function EmployeeApp() {
               >
                 <Clock className="w-7 h-7" style={{ color: '#3B6FB6' }} strokeWidth={1.5} />
               </div>
-              <p className="text-base font-medium mb-1.5" style={{ color: '#1C2B4A' }}>لم يتم تسجيل الحضور بعد</p>
-              <p className="text-sm" style={{ color: '#6D7A99' }}>اضغط على زر تسجيل الحضور للبدء</p>
+              <p className="text-base font-medium mb-1.5" style={{ color: '#1C2B4A' }}>Ù„Ù… ÙŠØªÙ… ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø­Ø¶ÙˆØ± Ø¨Ø¹Ø¯</p>
+              <p className="text-sm" style={{ color: '#6D7A99' }}>Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ Ø²Ø± ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø­Ø¶ÙˆØ± Ù„Ù„Ø¨Ø¯Ø¡</p>
             </div>
           )}
 
@@ -2915,7 +2745,7 @@ export default function EmployeeApp() {
               }}
             >
               <div className="flex items-center justify-between mb-2" dir="rtl">
-                <h3 className="text-xs font-medium" style={{ color: '#6D7A99' }}>متوسط ساعات العمل</h3>
+                <h3 className="text-xs font-medium" style={{ color: '#6D7A99' }}>Ù…ØªÙˆØ³Ø· Ø³Ø§Ø¹Ø§Øª Ø§Ù„Ø¹Ù…Ù„</h3>
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center"
                   style={{ background: 'rgba(59,111,182,0.1)' }}
@@ -2926,7 +2756,7 @@ export default function EmployeeApp() {
 
               <div className="text-right" dir="rtl">
                 <div className="flex items-baseline justify-end gap-1.5">
-                  <span className="text-xs" style={{ color: '#98A4C0' }}>ساعة/يوم</span>
+                  <span className="text-xs" style={{ color: '#98A4C0' }}>Ø³Ø§Ø¹Ø©/ÙŠÙˆÙ…</span>
                   <span className="text-2xl font-bold" style={{ color: '#1C2B4A' }} dir="ltr">
                     {monthlyStats.totalHours === 0 ? '0.0' : monthlyStats.averageHoursPerDay.toFixed(1)}
                   </span>
@@ -2960,7 +2790,7 @@ export default function EmployeeApp() {
                   <CheckCircle2 className="w-3.5 h-3.5 text-green-600" strokeWidth={1.5} />
                 </div>
                 <p className="text-sm font-medium leading-tight" style={{ color: '#1C2B4A' }} dir="rtl">
-                  تم تسجيل الانصراف تلقائيًا
+                  ØªÙ… ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø§Ù†ØµØ±Ø§Ù ØªÙ„Ù‚Ø§Ø¦ÙŠÙ‹Ø§
                 </p>
               </div>
             ) : error ? (
@@ -3015,7 +2845,7 @@ export default function EmployeeApp() {
                   <AlertCircle className="w-3.5 h-3.5 text-amber-600" strokeWidth={1.5} />
                 </div>
                 <p className="text-sm font-medium leading-tight" style={{ color: '#1C2B4A' }} dir="rtl">
-                  تعذر تحديث الموقع حاليًا
+                  ØªØ¹Ø°Ø± ØªØ­Ø¯ÙŠØ« Ø§Ù„Ù…ÙˆÙ‚Ø¹ Ø­Ø§Ù„ÙŠÙ‹Ø§
                 </p>
               </div>
             ) : locationState === 'OK' && isConfirmedOutside && !currentLog ? (
@@ -3034,7 +2864,7 @@ export default function EmployeeApp() {
                   <AlertCircle className="w-3.5 h-3.5 text-red-600" strokeWidth={1.5} />
                 </div>
                 <p className="text-sm font-medium leading-tight" style={{ color: '#1C2B4A' }} dir="rtl">
-                  خارج نطاق الفرع
+                  Ø®Ø§Ø±Ø¬ Ù†Ø·Ø§Ù‚ Ø§Ù„ÙØ±Ø¹
                 </p>
               </div>
             ) : locationState === 'OK' && !isConfirmedOutside && !currentLog ? (
@@ -3053,7 +2883,7 @@ export default function EmployeeApp() {
                   <CheckCircle2 className="w-3.5 h-3.5 text-green-600" strokeWidth={1.5} />
                 </div>
                 <p className="text-sm font-medium leading-tight" style={{ color: '#1C2B4A' }} dir="rtl">
-                  تم التحقق من موقعك - جاهز للتسجيل
+                  ØªÙ… Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ù…ÙˆÙ‚Ø¹Ùƒ - Ø¬Ø§Ù‡Ø² Ù„Ù„ØªØ³Ø¬ÙŠÙ„
                 </p>
               </div>
             ) : currentLog && locationHealth.isFresh && !autoCheckout.active ? (
@@ -3072,7 +2902,7 @@ export default function EmployeeApp() {
                   <CheckCircle2 className="w-3.5 h-3.5 text-green-600" strokeWidth={1.5} />
                 </div>
                 <p className="text-sm font-medium leading-tight" style={{ color: '#1C2B4A' }} dir="rtl">
-                  مراقبة الدوام نشطة
+                  Ù…Ø±Ø§Ù‚Ø¨Ø© Ø§Ù„Ø¯ÙˆØ§Ù… Ù†Ø´Ø·Ø©
                 </p>
               </div>
             ) : null}
@@ -3107,7 +2937,7 @@ export default function EmployeeApp() {
               {preCheckInVerifying ? (
                 <>
                   <Loader2 className="w-6 h-6 animate-spin" />
-                  <span>جاري تحديد الموقع...</span>
+                  <span>Ø¬Ø§Ø±ÙŠ ØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ù…ÙˆÙ‚Ø¹...</span>
                   <div className="text-sm font-mono opacity-90" dir="ltr">
                     {preCheckInElapsedSec}s / 30s
                   </div>
@@ -3115,18 +2945,18 @@ export default function EmployeeApp() {
               ) : actionLoading ? (
                 <>
                   <Loader2 className="w-6 h-6 animate-spin" />
-                  <span>جاري المعالجة...</span>
+                  <span>Ø¬Ø§Ø±ÙŠ Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬Ø©...</span>
                 </>
               ) : autoCheckout.executionState === 'EXECUTING' ? (
                 <>
                   <Loader2 className="w-6 h-6 animate-spin" />
-                  <span className="text-base">جاري تنفيذ الانصراف...</span>
+                  <span className="text-base">Ø¬Ø§Ø±ÙŠ ØªÙ†ÙÙŠØ° Ø§Ù„Ø§Ù†ØµØ±Ø§Ù...</span>
                 </>
               ) : autoCheckout.executionState === 'COUNTING' && autoCheckout.active ? (
                 <>
                   <div className="flex items-center gap-2">
                     <AlertCircle className="w-6 h-6" />
-                    <span className="text-base">انصراف تلقائي خلال</span>
+                    <span className="text-base">Ø§Ù†ØµØ±Ø§Ù ØªÙ„Ù‚Ø§Ø¦ÙŠ Ø®Ù„Ø§Ù„</span>
                   </div>
                   <div className="text-3xl font-mono font-bold tracking-wider" dir="ltr">
                     {(() => {
@@ -3138,23 +2968,23 @@ export default function EmployeeApp() {
                     })()}
                   </div>
                   <div className="text-xs opacity-90">
-                    {autoCheckout.reason === 'LOCATION_DISABLED' ? 'خدمة الموقع معطلة' : 'خارج نطاق الفرع'}
+                    {autoCheckout.reason === 'LOCATION_DISABLED' ? 'Ø®Ø¯Ù…Ø© Ø§Ù„Ù…ÙˆÙ‚Ø¹ Ù…Ø¹Ø·Ù„Ø©' : 'Ø®Ø§Ø±Ø¬ Ù†Ø·Ø§Ù‚ Ø§Ù„ÙØ±Ø¹'}
                   </div>
                 </>
               ) : !currentLog && locationState === 'LOCATING' ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span className="text-sm">جاري تحديد الموقع...</span>
+                  <span className="text-sm">Ø¬Ø§Ø±ÙŠ ØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ù…ÙˆÙ‚Ø¹...</span>
                 </>
               ) : !currentLog && locationState === 'STALE' ? (
                 <>
                   <AlertCircle className="w-5 h-5" />
-                  <span className="text-sm">بانتظار تحديث الموقع</span>
+                  <span className="text-sm">Ø¨Ø§Ù†ØªØ¸Ø§Ø± ØªØ­Ø¯ÙŠØ« Ø§Ù„Ù…ÙˆÙ‚Ø¹</span>
                 </>
               ) : (
                 <>
                   <Fingerprint className="w-6 h-6" />
-                  <span>{currentLog ? 'تسجيل الانصراف' : 'تسجيل الحضور'}</span>
+                  <span>{currentLog ? 'ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø§Ù†ØµØ±Ø§Ù' : 'ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø­Ø¶ÙˆØ±'}</span>
                 </>
               )}
             </button>
@@ -3179,7 +3009,7 @@ export default function EmployeeApp() {
                   </div>
                   <div className="flex-1 pt-1">
                     <p className="text-sm font-medium" style={{ color: '#1C2B4A' }}>
-                      تعذر تحديد الموقع الآن - يرجى المحاولة مرة أخرى
+                      ØªØ¹Ø°Ø± ØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø¢Ù† - ÙŠØ±Ø¬Ù‰ Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù…Ø±Ø© Ø£Ø®Ø±Ù‰
                     </p>
                   </div>
                 </div>
@@ -3226,7 +3056,7 @@ export default function EmployeeApp() {
                 }}
               >
                 <p className="text-center text-sm font-medium" style={{ color: '#1C2B4A' }} dir="rtl">
-                  هل أنت متأكد من تسجيل الانصراف؟
+                  Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø§Ù†ØµØ±Ø§ÙØŸ
                 </p>
                 <div className="grid grid-cols-2 gap-3">
                   <button
@@ -3238,7 +3068,7 @@ export default function EmployeeApp() {
                       color: '#6D7A99'
                     }}
                   >
-                    إلغاء
+                    Ø¥Ù„ØºØ§Ø¡
                   </button>
                   <button
                     onClick={() => handleCheckOut({ source: 'manual' })} // Manual confirmation path
@@ -3250,7 +3080,7 @@ export default function EmployeeApp() {
                       boxShadow: '0 4px 12px rgba(249,115,22,0.3)'
                     }}
                   >
-                    <span>تأكيد</span>
+                    <span>ØªØ£ÙƒÙŠØ¯</span>
                     <ChevronRight className="w-4 h-4" strokeWidth={1.5} />
                   </button>
                 </div>
@@ -3284,7 +3114,7 @@ export default function EmployeeApp() {
                   />
                 </div>
                 <div className="text-xs flex-1" dir="rtl">
-                  <p className="font-medium mb-1" style={{ color: '#1C2B4A' }}>الموقع:</p>
+                  <p className="font-medium mb-1" style={{ color: '#1C2B4A' }}>Ø§Ù„Ù…ÙˆÙ‚Ø¹:</p>
                   {locationCity && locationCountry ? (
                     <p style={{
                       color: branchLocation
@@ -3294,7 +3124,7 @@ export default function EmployeeApp() {
                       {locationCity}, {locationCountry}
                     </p>
                   ) : (
-                    <p className="italic" style={{ color: '#98A4C0' }}>جاري تحديد الموقع...</p>
+                    <p className="italic" style={{ color: '#98A4C0' }}>Ø¬Ø§Ø±ÙŠ ØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ù…ÙˆÙ‚Ø¹...</p>
                   )}
                   <p
                     className="font-mono mt-1 text-[10px]"
@@ -3308,7 +3138,7 @@ export default function EmployeeApp() {
                   </p>
                   {location.accuracy && (
                     <p className="mt-0.5" style={{ color: '#98A4C0' }}>
-                      دقة: ±{Math.round(location.accuracy)}م
+                      Ø¯Ù‚Ø©: Â±{Math.round(location.accuracy)}Ù…
                     </p>
                   )}
                 </div>
@@ -3340,7 +3170,7 @@ export default function EmployeeApp() {
               <AlertCircle className="w-5 h-5 text-white" strokeWidth={1.5} />
             </div>
             <p className="text-sm font-medium" style={{ color: '#1C2B4A' }} dir="rtl">
-              تم تسجيل الانصراف تلقائياً بسبب مشكلة في الموقع
+              ØªÙ… ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø§Ù†ØµØ±Ø§Ù ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹ Ø¨Ø³Ø¨Ø¨ Ù…Ø´ÙƒÙ„Ø© ÙÙŠ Ø§Ù„Ù…ÙˆÙ‚Ø¹
             </p>
           </div>
         </div>
@@ -3386,7 +3216,7 @@ export default function EmployeeApp() {
         }}
       />
 
-      {/* 🔍 DEBUG PANEL - Always visible for diagnostics */}
+      {/* ðŸ” DEBUG PANEL - Always visible for diagnostics */}
       <BranchDebugPanel
         authUid={employee?.id || null}
         employee={employee ? {

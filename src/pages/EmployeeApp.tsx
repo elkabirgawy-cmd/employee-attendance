@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import {
-  MapPin, LogOut, Clock, User, Calendar, Sun, Moon,
-  ArrowRight, CheckCircle, XCircle, Loader2, ChevronRight, ChevronDown,
-  Fingerprint, ArrowUpCircle, AlertCircle, CheckCircle2, Calculator, FileText, Globe
+  MapPin, LogOut, Clock, User, Sun, Moon,
+  ArrowRight, XCircle, Loader2, ChevronRight, ChevronDown,
+  Fingerprint, ArrowUpCircle, AlertCircle, CheckCircle2, Calculator
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import Avatar from '../components/Avatar';

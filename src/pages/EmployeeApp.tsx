@@ -185,7 +185,6 @@ export default function EmployeeApp() {
   const locationPollingRef = useRef<number | null>(null);
   const locationAttemptTimerRef = useRef<number | null>(null);
   const locationStatusPollingRef = useRef<number | null>(null);
-  const loginLocationWasOffRef = useRef<boolean>(false);
   const locationSupervisorRef = useRef<number | null>(null);
   const locationFixSuccessRef = useRef<boolean>(false);
 
@@ -359,17 +358,6 @@ export default function EmployeeApp() {
     return 'unknown' as const;
   };
 
-  const recheckLocationState = async (): Promise<{ enabled: boolean; permission: 'granted' | 'denied' | 'prompt' | 'unknown' }> => {
-    if (!('geolocation' in navigator)) {
-      return { enabled: false, permission: 'denied' };
-    }
-
-    const permission = await checkPermission();
-    const enabled = permission === 'granted';
-
-    return { enabled, permission };
-  };
-
   const stopLocationSupervisor = () => {
     if (locationSupervisorRef.current) {
       clearInterval(locationSupervisorRef.current);
@@ -478,61 +466,6 @@ export default function EmployeeApp() {
         attemptLocationFix();
       }
     }, 2000);
-  };
-
-  const silentSessionRefresh = async () => {
-    if (DEBUG_LOCATION_RECOVERY) {
-      console.log('[silentSessionRefresh] Starting silent refresh...');
-    }
-
-    try {
-      const sessionToken = localStorage.getItem('geoshift_session_token');
-      const employeeData = localStorage.getItem('geoshift_employee');
-
-      if (!sessionToken || !employeeData) {
-        if (DEBUG_LOCATION_RECOVERY) {
-          console.log('[silentSessionRefresh] No session data found, skipping');
-        }
-        return;
-      }
-
-      const emp = JSON.parse(employeeData);
-
-      if (DEBUG_LOCATION_RECOVERY) {
-        console.log('[silentSessionRefresh] Refreshing employee profile and branch data...');
-      }
-
-      const { data: empData } = await supabase
-        .from('employees')
-        .select('id, full_name, employee_code, phone, branch_id, avatar_url, company_id')
-        .eq('id', emp.id)
-        .maybeSingle();
-
-      if (empData) {
-        setEmployee(empData);
-        localStorage.setItem('geoshift_employee', JSON.stringify(empData));
-
-        const { data: branchData } = await supabase
-          .from('branches')
-          .select('latitude, longitude, geofence_radius')
-          .eq('id', empData.branch_id)
-          .maybeSingle();
-
-        if (branchData) {
-          setBranchLocation({
-            lat: branchData.latitude,
-            lng: branchData.longitude,
-            radius: branchData.geofence_radius
-          });
-        }
-
-        if (DEBUG_LOCATION_RECOVERY) {
-          console.log('[silentSessionRefresh] Employee and branch data refreshed successfully');
-        }
-      }
-    } catch (error) {
-      console.error('[silentSessionRefresh] Error during refresh:', error);
-    }
   };
 
   const stopLocationWatcher = () => {

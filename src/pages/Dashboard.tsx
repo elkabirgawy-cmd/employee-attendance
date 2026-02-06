@@ -463,22 +463,31 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
       subtitle=""
     >
       {/* Custom Compact Header */}
-      {/* Unified Dashboard Container */}
-      <div className="mx-auto w-[98%] max-w-md flex flex-col gap-3 pb-8">
+      {/* Unified Dashboard Container (Full Width Background Override) */}
+      <div className="bg-[#EEF3F9] -mx-6 -mt-6 px-4 py-4 min-h-[calc(100vh-4rem)]">
+        <div className="mx-auto w-[96%] max-w-md flex flex-col gap-2 pb-8">
 
-        {/* 1. Time Card (Focal Point) */}
-        <div className="w-full">
-          <ServerTimeCard />
-        </div>
+          {/* 1. Time Card (Focal Point) */}
+          <div className="w-full shadow-sm rounded-[1.5rem] overflow-hidden">
+            <ServerTimeCard />
+          </div>
 
-        {/* 2. Header Section (Title + Badges) */}
-        <div className="flex flex-col gap-1 px-1 mb-1">
-          <div className="flex items-center justify-between">
+          {/* 2. Header Section (Title + Badges Inline) */}
+          <div className="flex items-center justify-between px-2 py-1">
             {/* Left side (Status Chips) */}
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleManualRefresh}
+                disabled={isRefreshing}
+                className={`text-[10px] text-slate-500 flex items-center gap-1 bg-white px-2 py-1 rounded-full shadow-sm border border-slate-200 transition-all active:scale-95 ${isRefreshing ? 'opacity-75' : ''}`}
+              >
+                <div className={`w-1.5 h-1.5 rounded-full ${isRefreshing ? 'bg-blue-600 animate-ping' : flash ? 'bg-blue-400' : 'bg-slate-400'}`}></div>
+                <span>{isRefreshing ? (language === 'ar' ? '...' : '...') : formatLastUpdate()}</span>
+              </button>
+
               {dayStatus && (
                 <span
-                  className={`px-3 py-1 rounded-xl text-[11px] font-bold shadow-sm ${dayStatus.status === 'OFFDAY'
+                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold shadow-sm ${dayStatus.status === 'OFFDAY'
                     ? 'bg-amber-100 text-amber-700'
                     : 'bg-emerald-100 text-emerald-700'
                     }`}
@@ -488,57 +497,48 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
                     : (language === 'ar' ? 'يوم عمل' : 'WORK DAY')}
                 </span>
               )}
-
-              <button
-                onClick={handleManualRefresh}
-                disabled={isRefreshing}
-                className={`text-[10px] text-slate-500 flex items-center gap-1.5 bg-white px-2 py-1 rounded-xl shadow-sm border border-slate-100 transition-all active:scale-95 ${isRefreshing ? 'opacity-75' : ''}`}
-              >
-                <div className={`w-1.5 h-1.5 rounded-full ${isRefreshing ? 'bg-blue-600 animate-ping' : flash ? 'bg-blue-400' : 'bg-slate-400'}`}></div>
-                <span>{isRefreshing ? (language === 'ar' ? '...' : '...') : formatLastUpdate()}</span>
-              </button>
             </div>
 
             {/* Right side (Title) */}
-            <h1 className="text-xl font-bold text-slate-800">
+            <h1 className="text-lg font-bold text-slate-700">
               {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
             </h1>
           </div>
-        </div>
 
-        {/* 3. Onboarding Actions (if needed) */}
-        {companyId && (
-          <div className="w-full">
-            <OnboardingSetupCard
-              companyId={companyId}
-              onNavigateToBranches={() => handleNavigate('branches', { openAddModal: true })}
-              onNavigateToEmployees={() => handleNavigate('employees', { openAddModal: true })}
-            />
-          </div>
-        )}
-
-        {/* 4. Statistics Stack (Unified) */}
-        <div className="flex flex-col gap-2">
-          {loading ? (
-            <AdminSkeleton type="card" count={7} className="h-20 rounded-2xl" />
-          ) : (
-            summaryCards.map((card) => {
-              const isSelected = selectedCardId === card.id;
-
-              return (
-                <AdminStatCard
-                  key={card.id}
-                  title={card.title}
-                  value={<AnimatedNumber value={card.value} />}
-                  icon={card.icon}
-                  iconClassName={`${card.iconBg} ${card.iconColor}`}
-                  onClick={() => handleCardClick(card.page, card.title, card.id)}
-                  className={`w-full !rounded-2xl transition-all duration-200 active:scale-[0.98] ${isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : 'bg-white shadow-sm hover:shadow-md'}`}
-                  trend={undefined}
-                />
-              );
-            })
+          {/* 3. Onboarding Actions */}
+          {companyId && (
+            <div className="w-full">
+              <OnboardingSetupCard
+                companyId={companyId}
+                onNavigateToBranches={() => handleNavigate('branches', { openAddModal: true })}
+                onNavigateToEmployees={() => handleNavigate('employees', { openAddModal: true })}
+              />
+            </div>
           )}
+
+          {/* 4. Statistics Stack (Compact) */}
+          <div className="flex flex-col gap-2">
+            {loading ? (
+              <AdminSkeleton type="card" count={7} className="h-20 rounded-2xl" />
+            ) : (
+              summaryCards.map((card) => {
+                const isSelected = selectedCardId === card.id;
+
+                return (
+                  <AdminStatCard
+                    key={card.id}
+                    title={card.title}
+                    value={<AnimatedNumber value={card.value} />}
+                    icon={card.icon}
+                    iconClassName={`${card.iconBg} ${card.iconColor}`}
+                    onClick={() => handleCardClick(card.page, card.title, card.id)}
+                    className={`w-full !rounded-xl transition-all duration-200 active:scale-[0.98] ${isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : 'bg-white shadow-sm hover:shadow-md'}`}
+                    trend={undefined}
+                  />
+                );
+              })
+            )}
+          </div>
         </div>
       </div>
 

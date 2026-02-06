@@ -131,19 +131,19 @@ export default function ServerTimeCard({
     : 'bg-gradient-to-br from-indigo-400 to-purple-500';
 
   return (
-    <div className="bg-white border border-slate-100 border-l-4 border-l-blue-600 rounded-[1.5rem] shadow-md p-8 overflow-hidden mb-0 transition-all duration-300 min-h-[160px] flex flex-col justify-center relative z-10 w-full">
-      <div className="flex items-center justify-between gap-6">
+    <div className="bg-white border-0 border-l-4 border-l-blue-600 rounded-[1.5rem] shadow-sm p-8 overflow-hidden mb-0 transition-all duration-300 min-h-[175px] flex flex-col justify-center relative z-10 w-full">
+      <div className={`flex items-center justify-between gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
         <div className="flex-shrink-0">
-          <div className={`w-16 h-16 rounded-2xl ${iconBgColor} flex items-center justify-center shadow-lg transform transition-all duration-500`}>
+          <div className={`w-16 h-16 rounded-2xl ${iconBgColor} flex items-center justify-center shadow-md transform transition-all duration-500`}>
             <TimeIcon size={32} className="text-white" />
           </div>
         </div>
 
         <div className="flex flex-col items-end" dir={isRTL ? 'rtl' : 'ltr'}>
-          <div className="text-4xl font-black leading-none mb-2 text-slate-800 tracking-tight tabular-nums">
+          <div className="text-5xl font-black leading-none mb-3 text-slate-800 tracking-tight tabular-nums">
             {time} <span className="text-xl font-bold text-slate-400">{period}</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-slate-500 font-medium">
+          <div className="flex items-center gap-2 text-sm text-slate-500 font-medium bg-slate-50 px-3 py-1 rounded-full">
             <Calendar size={14} className="text-blue-600" />
             <span>{formatDateArabic(serverTime)}</span>
           </div>

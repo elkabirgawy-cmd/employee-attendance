@@ -27,16 +27,16 @@ export default function AdminStatCard({ title, value, icon: Icon, trend, status,
     return (
         <div
             onClick={onClick}
-            className={`${theme.classes.cardClass} p-3 flex items-start justify-between min-h-[85px] !rounded-2xl !shadow-sm border-0 ${isClickable ? theme.classes.cardHoverClass + ' cursor-pointer' : ''} ${className}`}
+            className={`${theme.classes.cardClass} p-3 flex items-start justify-between min-h-[80px] !rounded-xl !shadow-sm border-0 ${isClickable ? theme.classes.cardHoverClass + ' cursor-pointer' : ''} ${className}`}
         >
             <div>
-                <h3 className={`${theme.classes.statTitleClass} !text-sm`}>{title}</h3>
-                <div className={`mt-1 ${theme.classes.statValueClass} !text-xl`}>
+                <h3 className={`${theme.classes.statTitleClass} !text-sm text-slate-600`}>{title}</h3>
+                <div className={`mt-0.5 ${theme.classes.statValueClass} !text-xl font-bold text-slate-800`}>
                     {value}
                 </div>
 
                 {(trend || status) && (
-                    <div className="mt-2 flex items-center gap-2">
+                    <div className="mt-1 flex items-center gap-2">
                         {status && (
                             <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium 
                 ${status.color === 'success' ? 'bg-green-100 text-green-700' :
@@ -56,8 +56,8 @@ export default function AdminStatCard({ title, value, icon: Icon, trend, status,
             </div>
 
             {Icon && (
-                <div className={`p-2 rounded-lg ${iconClassName || 'bg-slate-50 text-slate-400'}`}>
-                    <Icon size={20} />
+                <div className={`p-2.5 rounded-lg ${iconClassName || 'bg-slate-100 text-slate-500'}`}>
+                    <Icon size={18} />
                 </div>
             )}
         </div>

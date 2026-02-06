@@ -463,39 +463,41 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
       subtitle=""
     >
       {/* Custom Compact Header */}
-      <div className="-mt-8 mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <h1 className="text-2xl font-bold text-slate-800">
+      {/* Custom Compact Header Area */}
+      <div className="mb-6 space-y-4">
+        {/* 1. Time Card FIRST */}
+        <ServerTimeCard />
+
+        {/* 2. Title & Badges BELOW Time Card */}
+        <div className="flex flex-col gap-2 px-1">
+          <h1 className="text-2xl font-bold text-slate-800 text-right">
             {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
           </h1>
-        </div>
 
-        <div className="flex items-center gap-3 text-sm mb-4">
-          {dayStatus && (
-            <span
-              className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider border shadow-sm ${dayStatus.status === 'OFFDAY'
-                ? 'bg-amber-50 text-amber-700 border-amber-200'
-                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                }`}
+          <div className="flex items-center justify-end gap-3 text-sm">
+            <button
+              onClick={handleManualRefresh}
+              disabled={isRefreshing}
+              className={`text-xs text-slate-500 flex items-center gap-2 bg-white px-2 py-0.5 rounded-full border border-slate-200 shadow-sm transition-all hover:bg-slate-50 active:scale-95 ${isRefreshing ? 'opacity-75 cursor-wait' : 'cursor-pointer'}`}
             >
-              {dayStatus.status === 'OFFDAY'
-                ? (language === 'ar' ? 'إجازة' : 'OFF DAY')
-                : (language === 'ar' ? 'يوم عمل' : 'WORK DAY')}
-            </span>
-          )}
+              <div className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${isRefreshing ? 'bg-blue-600 animate-ping' : flash ? 'bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.6)] scale-125' : 'bg-slate-400 scale-100'}`}></div>
+              <span>{isRefreshing ? (language === 'ar' ? 'جاري التحديث...' : 'Updating...') : formatLastUpdate()}</span>
+            </button>
 
-          <button
-            onClick={handleManualRefresh}
-            disabled={isRefreshing}
-            className={`text-xs text-slate-500 flex items-center gap-2 bg-white px-2 py-0.5 rounded-full border border-slate-200 shadow-sm transition-all hover:bg-slate-50 active:scale-95 ${isRefreshing ? 'opacity-75 cursor-wait' : 'cursor-pointer'}`}
-          >
-            <div className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${isRefreshing ? 'bg-blue-600 animate-ping' : flash ? 'bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.6)] scale-125' : 'bg-slate-400 scale-100'}`}></div>
-            <span>{isRefreshing ? (language === 'ar' ? 'جاري التحديث...' : 'Updating...') : formatLastUpdate()}</span>
-          </button>
+            {dayStatus && (
+              <span
+                className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider border shadow-sm ${dayStatus.status === 'OFFDAY'
+                  ? 'bg-amber-50 text-amber-700 border-amber-200'
+                  : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  }`}
+              >
+                {dayStatus.status === 'OFFDAY'
+                  ? (language === 'ar' ? 'إجازة' : 'OFF DAY')
+                  : (language === 'ar' ? 'يوم عمل' : 'WORK DAY')}
+              </span>
+            )}
+          </div>
         </div>
-
-        {/* Server Time Card */}
-        <ServerTimeCard />
       </div>
 
       {/* Onboarding Setup Card */}

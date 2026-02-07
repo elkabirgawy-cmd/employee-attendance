@@ -464,20 +464,22 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
     >
       {/* Custom Compact Header */}
       {/* Unified Dashboard Container (Full Width Background Override) */}
-      {/* Unified Dashboard Block (The "One Container" System) */}
-      <div className="mx-auto w-[98%] bg-[#EEF3F9] rounded-[2.5rem] shadow-sm overflow-hidden pb-6 mb-8 mt-2">
+      {/* Unified Dashboard Block (Final Strict Design) */}
+      <div className="mx-auto w-[98%] bg-slate-100 rounded-[2rem] shadow-sm overflow-hidden pb-6 mb-8 mt-2">
 
-        {/* 1. Time Section (Embedded Header) */}
-        <ServerTimeCard />
+        {/* 1. Time Section (Hero Card Style) */}
+        <div className="w-full">
+          <ServerTimeCard />
+        </div>
 
         {/* 2. Header Row (Title + Chips) - Directly under time */}
-        <div className="flex items-center justify-between px-6 mb-4 mt-1">
+        <div className="flex items-center justify-between px-5 mb-3 mt-4">
           {/* Left: Status Chips */}
           <div className="flex items-center gap-2">
             <button
               onClick={handleManualRefresh}
               disabled={isRefreshing}
-              className={`text-[10px] text-slate-500 flex items-center gap-1 bg-white/50 px-2 py-1 rounded-full border border-slate-200/50 transition-all active:scale-95 ${isRefreshing ? 'opacity-75' : ''}`}
+              className={`text-[10px] text-slate-500 flex items-center gap-1 bg-white px-2.5 py-1 rounded-full border border-slate-200 shadow-sm transition-all active:scale-95 ${isRefreshing ? 'opacity-75' : ''}`}
             >
               <div className={`w-1.5 h-1.5 rounded-full ${isRefreshing ? 'bg-blue-600 animate-ping' : flash ? 'bg-blue-400' : 'bg-slate-400'}`}></div>
               <span>{isRefreshing ? (language === 'ar' ? '...' : '...') : formatLastUpdate()}</span>
@@ -485,9 +487,9 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
 
             {dayStatus && (
               <span
-                className={`px-2.5 py-1 rounded-full text-[10px] font-bold shadow-sm ${dayStatus.status === 'OFFDAY'
-                  ? 'bg-amber-100/80 text-amber-700'
-                  : 'bg-emerald-100/80 text-emerald-700'
+                className={`px-3 py-1 rounded-full text-[10px] font-bold shadow-sm ${dayStatus.status === 'OFFDAY'
+                  ? 'bg-amber-100 text-amber-700'
+                  : 'bg-emerald-100 text-emerald-700'
                   }`}
               >
                 {dayStatus.status === 'OFFDAY'
@@ -498,15 +500,15 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
           </div>
 
           {/* Right: Dashboard Title */}
-          <h1 className="text-base font-bold text-slate-600">
+          <h1 className="text-base font-bold text-slate-700">
             {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
           </h1>
         </div>
 
-        {/* 3. Stats Stack (Inside Container) */}
-        <div className="flex flex-col gap-2 px-4">
+        {/* 3. Stats Stack (Inset width) */}
+        <div className="flex flex-col gap-3 px-3">
 
-          {/* Onboarding (if needed) */}
+          {/* Onboarding */}
           {companyId && (
             <div className="w-full mb-1">
               <OnboardingSetupCard
@@ -518,7 +520,7 @@ export default function Dashboard({ currentPage, onNavigate }: DashboardProps) {
           )}
 
           {loading ? (
-            <AdminSkeleton type="card" count={7} className="h-16 rounded-xl" />
+            <AdminSkeleton type="card" count={7} className="h-20 rounded-xl" />
           ) : (
             summaryCards.map((card) => {
               const isSelected = selectedCardId === card.id;

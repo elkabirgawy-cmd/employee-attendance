@@ -27,7 +27,7 @@ export default function AdminStatCard({ title, value, icon: Icon, trend, status,
     return (
         <div
             onClick={onClick}
-            className={`${theme.classes.cardClass} p-3 flex items-start justify-between min-h-[80px] !rounded-xl !shadow-sm border-0 ${isClickable ? theme.classes.cardHoverClass + ' cursor-pointer' : ''} ${className}`}
+            className={`${theme.classes.cardClass} p-3 flex items-start justify-between min-h-[75px] !rounded-xl !shadow-sm border-0 ${isClickable ? theme.classes.cardHoverClass + ' cursor-pointer' : ''} ${className}`}
         >
             <div>
                 <h3 className={`${theme.classes.statTitleClass} !text-sm text-slate-600`}>{title}</h3>
